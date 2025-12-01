@@ -1,0 +1,20 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.app-wrapper {
+  padding-top: 80px; /* Same as header height */
+  padding-bottom: 60px; /* Same as footer height */
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.app-content {
+  flex: 1;
+  
+overflow-y: auto;
+  height: calc(100vh - 140px); 
+
+}

@@ -1,0 +1,59 @@
+.visitor-table {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 20px;
+  margin-right: 4.5%;
+}
+
+.visitor-header,
+.visitor-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+   font-family:Georgia, 'Times New Roman', Times, serif;
+  padding: 10px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.visitor-header {
+  font-weight: bold;
+  background-color: #e0e0e0;
+}
+
+
+.empty-background {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 200px); /* Adjust based on header/tabs height */
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.background-icon {
+  width: 100%;
+  max-width: 250px; /* Optional: limit max size */
+  height: auto;
+  opacity: 0.5;
+  object-fit: contain;
+}
+
+.no-data-text {
+  margin-top: 12px;
+  font-size: 18px;
+  color: #555;
+  font-weight: 500;
+  text-align: center;
+}
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}

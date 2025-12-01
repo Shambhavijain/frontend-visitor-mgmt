@@ -1,0 +1,56 @@
+<header>
+
+  <div class="text-white font-weight-bold">{{ appName }}</div>
+
+
+  <button class="btn p-0 border-0 bg-transparent" (click)="toggleDropDown($event)" aria-label="User Menu"
+    style="width: 40px; height: 40px;">
+    <img [src]="userIconPath" alt="User Icon" class="img-fluid rounded-circle" style="width: 100%; height: 100%;">
+  </button>
+
+  <div *ngIf="showDropdown" class="dropdown-menu show custom-dropdown" #dropdownMenu>
+    <span class="dropdown-item-text"><strong>{{constString.userId}}</strong> {{ userId }}</span>
+    <span class="dropdown-item-text"><strong>{{constString.role}}</strong> {{ role }}</span>
+    <span *ngIf="role === 'owner'" class="dropdown-item-text"><strong>{{constString.flatno}}</strong> {{ flatno }}</span>
+    <span *ngIf="role === 'owner'" class="dropdown-item-text"><strong>{{constString.tower}}</strong> {{ tower }}</span>
+
+    <div *ngIf="role === 'owner'" class="dropdown-divider"></div>
+
+    <button *ngIf="role === 'owner'" class="dropdown-item d-flex justify-content-between align-items-center"
+      data-bs-toggle="modal" data-bs-target="#exampleModal">
+      {{constString.updateProfile}}
+      <img [src]="update_profile" alt="Update Icon" class="icon-small ms-2">
+    </button>
+
+    <div class="dropdown-divider"></div>
+
+    <button class="dropdown-item d-flex justify-content-between align-items-center font-small" (click)="logout()">
+      {{constString.logoutUser}}
+      <img [src]="user_logout" alt="Logout Icon" class="icon-small ms-2">
+    </button>
+  </div>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="ownerModalLabel">{{constString.updateProfile}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="update()">
+            <div class="mb-3">
+              <label>{{constString.email}}</label>
+              <input type="email" [(ngModel)]="email" name="email" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label>{{constString.username}}</label>
+              <input type="text" [(ngModel)]="username" name="username" class="form-control" required />
+            </div>
+            <button type="submit" class="btn btn-primary">{{constString.saveChanges}}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

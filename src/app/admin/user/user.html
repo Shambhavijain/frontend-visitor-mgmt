@@ -1,0 +1,48 @@
+<p-toast></p-toast>
+
+<div class="user-management-container">
+  <div class="content">
+    <div class="back-button-container" style="text-align: right; margin: 10px 20px;">
+  <button class="back-button" (click)="goBack()">{{constString.backicon}}</button>
+</div>
+    <h2 class="heading-h2">{{constString.userListTitle}}</h2>
+
+    <div class="table-wrapper">
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>{{constString.srno}}</th>
+            <th>{{constString.name}}</th>
+            <th>{{constString.email}}</th>
+            <th>{{constString.address}}</th>
+            <th>{{constString.flatno}}</th>
+            <th>{{constString.tower}}</th>
+            <th>{{constString.action}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.address }}</td>
+            <td>{{ user.flat_no || '-' }}</td>
+            <td>{{ user.tower || '-' }}</td>
+            <td>
+              <button class="delete-button" (click)="deleteUser(i)"><img [src]="constString.deleteicon" alt="User Icon" class="delete-icon">
+</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+     @if (isLoading) {
+    <div class="loading-overlay">
+      <app-loader [isLoading]="isLoading"></app-loader>
+    </div>
+  }
+  </div>
+
+</div>

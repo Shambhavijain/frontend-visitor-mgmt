@@ -1,0 +1,73 @@
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px; /* or more if needed */
+  background-color: #121d2e;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+}
+
+
+header .text-white {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.icon-small {
+  width: 26px;
+  height: 26px;
+  margin-left: 16px;
+
+}
+
+.icon-logout-small {
+  width: 26px;
+  height: 26px;
+  margin-left: 28px;
+}
+
+.custom-dropdown {
+  font-size: 10px;
+  min-width: 140px;
+  max-width: 160px;
+  height: auto;
+  max-height: 240px;
+  padding: 4px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  z-index: 1050;
+}
+
+.dropdown-item-text {
+  padding: 4px 8px;
+  color: #333;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 16px;
+
+}
+
+.dropdown-item {
+  font-size: 16px;
+  padding: 8px 12px;
+}
+
+.icon-small {
+  width: 14px;
+  height: 14px;
+}
+.font-small {
+  font-size: 16px;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}

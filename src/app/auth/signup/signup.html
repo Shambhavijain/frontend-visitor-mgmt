@@ -1,0 +1,83 @@
+<p-toast></p-toast>
+
+<div class="signup-form-wrapper">
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-4 border rounded bg-light">
+    <h4 class="form-heading text-center mb-4">{{constString.appTitle}}</h4>
+    <div class="mb-3">
+      <label for="name" class="form-label">{{constString.name}}</label>
+      <input id="name" type="text" class="form-control" formControlName="name" placeholder="Enter your name" />
+      <div *ngIf="form.controls.name.invalid && form.controls.name.touched" class="text-danger">
+        {{constString.nameRequired}}
+      </div>
+    </div>
+
+
+    <div class="mb-3">
+      <label for="email" class="form-label">{{constString.email}}</label>
+      <input id="email" type="email" class="form-control" formControlName="email" placeholder="Enter your email" />
+      <div *ngIf="getEmailValid()" class="text-danger">
+        {{constString.validEmailRequired}}
+      </div>
+    </div>
+
+
+    <div class="mb-3">
+      <label for="password" class="form-label">{{constString.password}}</label>
+      <input id="password" type="password" class="form-control" formControlName="password"
+        placeholder="Enter password" />
+      <div *ngIf="getPasswordValid()" class="text-danger">
+        {{constString.passwordRequirement}}
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="confirmpassword" class="form-label">{{constString.confirmPassword}}</label>
+      <input id="confirmpassword" type="password" class="form-control" formControlName="confirmpassword"
+        placeholder="Confirm password" />
+      <div *ngIf="getPasswordValid()" class="text-danger">
+        {{constString.passwordsMustMatch}}
+      </div>
+    </div>
+
+
+    <div class="mb-3">
+      <label for="address" class="form-label">{{ constString.address }}</label>
+      <input id="address" type="text" class="form-control" formControlName="address" placeholder="Enter your address" />
+      <div *ngIf="form.controls.address.invalid && form.controls.address.touched" class="text-danger">
+        {{ constString.addressRequired }}
+      </div>
+    </div>
+
+
+    <div class="mb-3">
+      <label for="flat_no" class="form-label">{{ constString.flatno }}</label>
+      <input id="flat_no" type="text" class="form-control" formControlName="flat_no"
+        placeholder="Enter your flat number" />
+      <div *ngIf="form.controls.flat_no.invalid && form.controls.flat_no.touched" class="text-danger">
+        {{ constString.flatRequired }}
+      </div>
+    </div>
+
+
+    <div class="mb-3">
+      <label for="tower" class="form-label">{{ constString.tower }}</label>
+      <input id="tower" type="text" class="form-control" formControlName="tower" placeholder="Enter your tower" />
+      <div *ngIf="form.controls.tower.invalid && form.controls.tower.touched" class="text-danger">
+        {{ constString.towerRequired }}
+      </div>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary w-100">{{constString.signup}}</button>
+
+
+    <!-- <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div> -->
+
+    <!-- <div *ngIf="isSignedup && showSuccessMessage" class="text-success mt-3 text-center">
+      Signup successful!
+    </div> -->
+  </form>
+</div>

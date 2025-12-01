@@ -1,0 +1,26 @@
+/* Ensure full height layout */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.app-footer {
+  background-color: #121d2e;
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem; /* Reduced vertical padding */
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.para-title {
+  font-size: 16px; 
+  margin: 0; 
+}

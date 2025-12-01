@@ -1,0 +1,78 @@
+<p-toast></p-toast>
+<div class="nav-tab">
+  <div class="nav-tab position-relative">
+    <button class="btn btn-outline-secondary back-button" (click)="goBackByRole()">{{constString.backicon}}</button>
+
+    <ul class="nav nav-pills mb-3">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'approved'"
+          (click)="activeTab = 'approved'">{{constString.approved}}</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'declined'"
+          (click)="activeTab = 'declined'">{{constString.declined}}</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'pending'"
+          (click)="activeTab = 'pending'">{{constString.pending}}</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" id="pills-AddVisitor-tab" data-bs-target="#pills-AddVisitor" type="button" role="tab"
+          data-bs-toggle="modal" data-bs-target="#addVisitorModal" aria-selected="false"
+          (click)="openAddVisitorModal()">{{constString.addVisitor}}</button>
+      </li>
+    </ul>
+  </div>
+
+  <app-approved-visitors *ngIf="activeTab === 'approved'"></app-approved-visitors>
+  <app-declined-visitors *ngIf="activeTab === 'declined'"></app-declined-visitors>
+  <app-pending-visitors *ngIf="activeTab === 'pending'"></app-pending-visitors>
+
+
+  <div class="modal fade" id="addVisitorModal" tabindex="-1" aria-labelledby="addVisitorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered custom-modal">
+      <div class="modal-content custom-modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">{{constString.addVisitortitle}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <form (ngSubmit)="submitVisitorForm(userForm)" #userForm="ngForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="name" class="form-label">{{constString.name}}</label>
+              <input type="text" [(ngModel)]="newVisitor.name" name="name" class="form-control" required
+                #name="ngModel" />
+              <div *ngIf="name.invalid && name.touched" class="text-danger">{{constString.nameRequired}}</div>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">{{constString.email}}</label>
+              <input type="email" [(ngModel)]="newVisitor.email" name="email" class="form-control" required
+                #email="ngModel" />
+              <div *ngIf="email.invalid && email.touched" class="text-danger">{{constString.validEmailRequired}}</div>
+            </div>
+            <div class="mb-3">
+              <label for="tower" class="form-label">{{constString.tower}}</label>
+              <input type="text" [(ngModel)]="newVisitor.tower" name="tower" class="form-control" required
+                #tower="ngModel" />
+              <div *ngIf="tower.touched && tower.invalid" class="text-danger">{{constString.towerRequired}}</div>
+            </div>
+            <div class="mb-3">
+              <label for="flatno" class="form-label">{{constString.flatno}}</label>
+              <input type="text" [(ngModel)]="newVisitor.flat_no" name="flatno" class="form-control" required
+                #flatno="ngModel" />
+              <div *ngIf="flatno.touched && flatno.invalid" class="text-danger">{{constString.flatRequired}}</div>
+            </div>
+          </div>
+
+          <div class="modal-footer d-flex justify-content-start">
+            <button type="submit" class="btn btn-primary"
+              [disabled]="userForm.invalid">{{constString.addVisitor}}</button>
+            <button type="button" class="btn btn-secondary ms-auto"
+              data-bs-dismiss="modal">{{constString.cancel}}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>

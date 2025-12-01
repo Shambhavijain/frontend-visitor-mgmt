@@ -1,0 +1,28 @@
+<ng-container *ngIf="declinedVisitors.length > 0; else noApprovedVisitors">
+  <div class="visitor-table">
+    <div class="visitor-header">
+      <div>{{ constString.name }}</div>
+      <div>{{ constString.email }}</div>
+      <div>{{ constString.tower }}</div>
+      <div>{{ constString.flatno }}</div>
+    </div>
+
+    <div *ngFor="let visitor of declinedVisitors" class="visitor-row">
+
+      <div class="visitor-name">
+        <img [src]="constString.visitorAvatariconimg" alt="Avatar" class="avatar" />
+        {{ visitor.name }}
+      </div>
+      <div>{{ visitor.email }}</div>
+      <div>{{ visitor.tower }}</div>
+      <div>{{ visitor.flat_no }}</div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #noApprovedVisitors>
+  <div class="empty-background">
+    <img [src]="constString.backgroundicon" alt="Background Icon" class="background-icon" />
+    <p class="no-data-text">{{ constString.nodeclineVisitorFound}}</p>
+  </div>
+</ng-template>

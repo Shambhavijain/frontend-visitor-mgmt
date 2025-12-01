@@ -1,0 +1,210 @@
+<p-toast></p-toast>
+<div class="dashboard-layout">
+  <div class="main-content">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <ul>
+        @if (isAdmin) {
+        <li [routerLink]="['/admin-dashboard/manage-users']">{{ constString.manageUsers }}
+          <img [src]="userIconPath" alt="User Icon" class="icon-small">
+        </li>
+        <li [routerLink]="['/admin-dashboard/manage-visitors']">{{ constString.manageVisitors }}
+          <img [src]="visitorIconPath" alt="User Icon" class="icon-small">
+        </li>
+        <li [routerLink]="['/admin-dashboard/manage-gatekeepers']">{{ constString.manageGatekeepers }}
+          <img [src]="gatekeeperIconPath" alt="User Icon" class="icon-small">
+        </li>
+        }
+        @if (isGatekeeper) {
+        <li [routerLink]="['/gatekeeper-dashboard/manage-visitors']">{{ constString.manageVisitors }}
+          <img [src]="visitorIconPath" alt="User Icon" class="icon-small">
+        </li>
+        }
+        @if (isOwnerOrTenant) {
+        <li [routerLink]="['/owner-dashboard/manage-visitors']">{{ constString.manageVisitors }}
+          <img [src]="visitorIconPath" alt="User Icon" class="icon-small">
+        </li>
+        }
+      </ul>
+    </aside>
+
+
+  </div>
+  <router-outlet></router-outlet>
+
+</div>
+
+
+
+<section class="dashboard-container">
+  @if(isAdmin){
+  <div class="dashboard-flex">
+    <div class="cards-container">
+      <div class="dashboard-cards">
+        <div class="styled-card">
+          <img [src]="constString.approvedVisitorsiconimg" alt="User Icon" class="card-icon">
+          <h3>
+            {{constString.visitors}}</h3>
+          <p>{{dashboardService.visitorCount()}}</p>
+        </div>
+        <div class="styled-card">
+          <img [src]="constString.gatekeepericonimg" alt="User Icon" class="card-icon">
+          <h3>
+            {{constString.gatekeepers}}</h3>
+          <p>{{dashboardService.gatekeeperCount()}}</p>
+        </div>
+        <div class="styled-card">
+          <img [src]="constString.usersiconimg" alt="User Icon" class="card-icon">
+          <h3>
+            {{constString.users}}</h3>
+          <p>{{dashboardService.userCount()}}</p>
+        </div>
+        <div class="styled-card">
+          <img [src]="constString.pendingVisitorsiconimg" alt="User Icon" class="card-icon">
+          <h3>
+            {{constString.pendingRequests}}</h3>
+          <p>{{visitorService.pendingcount()}}</p>
+        </div>
+        <div class="styled-card">
+          <img [src]="constString.visitorsTodayiconimg" alt="User Icon" class="card-icon">
+          <h3>
+            {{constString.visitorsToday}}</h3>
+          <p>{{visitorService.visitorsTodayCount()}}</p>
+          <!-- <p>{{0}}</p>  static -->
+        </div>
+      </div>
+    </div>
+
+    <div class="recent-visitors-container">
+  <h3>Recent Visitors</h3>
+  <div class="visitor-cards">
+    <div class="visitor-card" *ngFor="let visitor of lastFiveVisitors">
+      
+<div class="card-header">
+    <span class="visit-time">{{ visitor.created_at | date:'short' }}</span>
+  </div>
+
+      <div class="visitor-info">
+        <p><strong>Name:</strong> {{ visitor.name }}</p>
+        <p><strong>Flat:</strong> {{ visitor.tower }}-{{ visitor.flat_no }}</p>
+
+      </div>
+      <div class="visitor-status" [ngClass]="{
+        'approved': visitor.status === 'approved',
+        'declined': visitor.status === 'declined',
+        'pending': visitor.status === 'pending'
+      }">
+        {{ visitor.status | titlecase }}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  </div>
+  }
+  @if(isGatekeeper){
+  <div class="dashboard-flex">
+    <div class="cards-container">
+      <div class="dashboard-cards">
+        <div class="styled-card">
+          <img [src]="constString.approvedVisitorsiconimg" alt="User Icon" class="card-icon">
+          <h3>
+            {{constString.approvedVisitors}}</h3>
+          <p>{{visitorService.approvedcount()}}</p>
+        </div>
+        <div class="styled-card">
+          <img [src]="constString.declinedVisitoricomimg" alt="User Icon" class="card-icon">
+          <h3>
+            {{constString.declinedVisitors}}</h3>
+          <p>{{visitorService.declinedcount()}}</p>
+        </div>
+        <div class="styled-card">
+          <img [src]="constString.pendingVisitorsiconimg" alt="User Icon" class="card-icon">
+
+          <h3>
+            {{constString.pendingRequests}}</h3>
+          <p>{{visitorService.pendingcount()}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="recent-visitors-container">
+  <h3>Recent Visitors</h3>
+  <div class="visitor-cards">
+    <div class="visitor-card" *ngFor="let visitor of lastFiveVisitors">
+      <div class="visitor-info">
+        <p><strong>Name:</strong> {{ visitor.name }}</p>
+        <p><strong>Flat:</strong> {{ visitor.tower }}-{{ visitor.flat_no }}</p>
+        <p><strong>Time:</strong> {{ visitor.created_at | date:'short' }}</p>
+      </div>
+      <div class="visitor-status" [ngClass]="{
+        'approved': visitor.status === 'approved',
+        'declined': visitor.status === 'declined',
+        'pending': visitor.status === 'pending'
+      }">
+        {{ visitor.status | titlecase }}
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+
+  }
+  @if(isOwnerOrTenant){
+  <div *ngIf="!isLoading; else loading">
+    <div class="dashboard-flex">
+      <div class="cards-container">
+        <div class="dashboard-cards">
+          <div class="styled-card">
+            <img [src]="constString.approvedVisitorsiconimg" alt="User Icon" class="card-icon">
+            <h3>{{ constString.approvedVisitors }}</h3>
+            <p>{{ visitorService.approvedcount() }}</p>
+          </div>
+          <div class="styled-card">
+            <img [src]="constString.declinedVisitoricomimg" alt="User Icon" class="card-icon">
+            <h3>{{ constString.declinedVisitors }}</h3>
+            <p>{{ visitorService.declinedcount() }}</p>
+          </div>
+          <div class="styled-card">
+            <img [src]="constString.pendingVisitorsiconimg" alt="User Icon" class="card-icon">
+            <h3>{{ constString.pendingRequests }}</h3>
+            <p>{{ visitorService.pendingcount() }}</p>
+          </div>
+        </div>
+      </div>
+
+
+    <div class="recent-visitors-container">
+  <h3>Recent Visitors</h3>
+  <div class="visitor-cards">
+    <div class="visitor-card" *ngFor="let visitor of lastFiveVisitors">
+      <div class="visitor-info">
+        <p><strong>Name:</strong> {{ visitor.name }}</p>
+        <p><strong>Flat:</strong> {{ visitor.tower }}-{{ visitor.flat_no }}</p>
+        <p><strong>Time:</strong> {{ visitor.created_at | date:'short' }}</p>
+      </div>
+      <div class="visitor-status" [ngClass]="{
+        'approved': visitor.status === 'approved',
+        'declined': visitor.status === 'declined',
+        'pending': visitor.status === 'pending'
+      }">
+        {{ visitor.status | titlecase }}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    </div>
+  </div>
+  <ng-template #loading>
+    <div class="loading-overlay">
+      <app-loader [isLoading]="isLoading"></app-loader>
+    </div>
+  </ng-template>
+  }
+</section>

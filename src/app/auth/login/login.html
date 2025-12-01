@@ -1,0 +1,65 @@
+<p-toast></p-toast>
+<div class="login-page">
+<div class="login-card">
+<h2 class="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-size: small;">{{constString.appTitle}}</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+<div class="mb-3">
+<input type="text" class="form-control" placeholder="Email" formControlName="email" autocomplete="off">
+@if (getEmailErrorMessage()) {
+    <div class="text-danger">
+        {{ getEmailErrorMessage() }}
+   </div> }
+
+</div>
+<div class="mb-3">
+<input type="password" class="form-control" placeholder="Password" formControlName="password" autocomplete="off">
+@if(getPasswordErrorMessage()){
+    <div class="text-danger">
+    {{ getPasswordErrorMessage() }}
+</div>
+}
+
+</div>
+<button type="submit" class="btn btn-primary " >{{constString.login}}</button>
+</form>
+<div class="Signup-msg">
+<a [routerLink]="['/signup']"><p>{{constString.donotHaveAccount}}<strong>{{constString.signup}}</strong></p></a>
+</div>
+
+
+<!-- <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055">
+  <div class="toast text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" id="successToast">
+    <div class="d-flex">
+     
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    </div>
+    </div> -->
+
+<!-- 
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055">
+  <div
+    class="toast text-white bg-danger border-0"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+    id="errorToast"
+  >
+    <div class="d-flex">
+      
+      <button
+        type="button"
+        class="btn-close btn-close-white me-2 m-auto"
+        data-bs-dismiss="toast"
+        aria-label="Close"></button>
+    </div>
+  </div>
+  </div> -->
+  
+  @if (isLoading) {
+    <div class="loading-overlay">
+      <app-loader [isLoading]="isLoading"></app-loader>
+    </div>
+  }
+
+
