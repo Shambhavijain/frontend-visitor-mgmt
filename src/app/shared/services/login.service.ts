@@ -13,7 +13,7 @@ export class LoginService {
    login(credentials: LoginRequest): Observable<any> {
 
       return this.httpClient
-         .post(`${BASE_URL}/login`, credentials,
+         .post(`${BASE_URL}/api/auth/login`, credentials,
             { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
          );
    }

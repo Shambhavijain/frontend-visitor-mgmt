@@ -36,6 +36,7 @@ export class User implements OnInit {
     const subscription = this.userService.listUsers().subscribe({
       next: (data: any[]) => {
         this.users = data.map(user => ({
+          id:user.userid,
           name: user.username,
           email: user.email,
           role: user.role,
@@ -71,7 +72,7 @@ export class User implements OnInit {
   }
 
   deleteUser(index: number): void {
-    const userToDelete = this.users[index].name;
+    const userToDelete = this.users[index].id;
     this.isLoading = true;
     const subscription = this.userService.deleteUser(userToDelete).subscribe({
       next: (res) => {

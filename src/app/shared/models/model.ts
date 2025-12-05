@@ -1,4 +1,5 @@
 export interface user {
+  id: string;  
   name: string;
   email: string
   role: string;
@@ -29,6 +30,7 @@ export interface LoginRequest {
   password: string;
 }
 export interface visitor {
+  id: string;
   name: string,
   email: string,
   tower: string,
@@ -36,4 +38,8 @@ export interface visitor {
   status: string,
   created_at?: string;
 
+}
+export type usercount= {
+  owner: number,
+  gatekeeper:number;
 }

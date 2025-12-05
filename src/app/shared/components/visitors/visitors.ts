@@ -14,31 +14,36 @@ import { MessageService } from 'primeng/api';
 declare var bootstrap: any;
 @Component({
   selector: 'app-visitors',
-  imports: [FormsModule, NgIf, CommonModule, ApprovedVisitors, DeclinedVisitors, PendingVisitors, ToastModule],
+  imports: [
+    FormsModule,
+    NgIf,
+    CommonModule,
+    ApprovedVisitors,
+    DeclinedVisitors,
+    PendingVisitors,
+    ToastModule,
+  ],
   templateUrl: './visitors.html',
-  styleUrl: './visitors.css'
+  styleUrl: './visitors.css',
 })
-
 export class Visitors implements OnInit {
-
-  constString = constString
-  private visitorService = inject(VisitorService)
-  visitors = this.visitorService.getVisitors
+  constString = constString;
+  private visitorService = inject(VisitorService);
+  visitors = this.visitorService.getVisitors;
   activeTab: string = 'approved';
   showAddVisitorModal: boolean = false;
   showSuccessMessage: boolean = false;
-  private router = inject(Router)
+  private router = inject(Router);
   private messageService = inject(MessageService);
 
-
   newVisitor: visitor = {
+    id: '',
     name: '',
     email: '',
     tower: '',
     flat_no: '',
-    status: 'pending'
+    status: 'pending',
   };
-
 
   isLoading = true;
   ngOnInit(): void {
@@ -51,9 +56,8 @@ export class Visitors implements OnInit {
           severity: 'success',
           summary: 'Visitors Loaded',
           detail: 'Visitor data loaded successfully.',
-          life: 3000
+          life: 3000,
         });
-
       },
       error: (err) => {
         console.error('Failed to fetch visitors:', err);
@@ -63,26 +67,23 @@ export class Visitors implements OnInit {
           severity: 'error',
           summary: 'Error Loading Visitors',
           detail: err.message || 'Unable to load visitor data.',
-          life: 3000
+          life: 3000,
         });
-
-      }
+      },
     });
   }
 
-
   navigateByRole(): void {
-    const role = localStorage.getItem('userRole')
+    const role = localStorage.getItem('userRole');
     switch (role) {
       case 'admin':
-        this.router.navigate(['/admin-dashboard'])
-        break
+        this.router.navigate(['/admin-dashboard']);
+        break;
       case 'owner':
-        this.router.navigate(['/owner-dashboard'])
-        break
+        this.router.navigate(['/owner-dashboard']);
+        break;
       case 'gatekeeper':
-        this.router.navigate(['/gatekeeper-dashboard'])
-
+        this.router.navigate(['/gatekeeper-dashboard']);
     }
   }
   openAddVisitorModal(): void {
@@ -96,41 +97,41 @@ export class Visitors implements OnInit {
   submitVisitorForm(userForm: NgForm): void {
     this.isLoading = true;
     this.visitorService.addVisitor(this.newVisitor).subscribe({
-      next: () => {
+      next: (createdVisitor) => {
+        console.log(createdVisitor)
         const modalElement = document.getElementById('addVisitorModal');
         const modalInstance = bootstrap.Modal.getInstance(modalElement);
         if (modalInstance) modalInstance.hide();
-
+        this.newVisitor.id = createdVisitor.id;
+        // this.newVisitor.created_at=createdVisitor.created_at
         this.messageService.add({
           severity: 'success',
           summary: 'Visitor Added',
           detail: 'Visitor request submitted successfully.',
-          life: 3000
+          life: 3000,
         });
         userForm.resetForm();
 
         this.visitorService.getAllVisitors().subscribe({
           next: (data) => this.visitorService.getVisitors.set(data),
-          error: (err) => console.error('Failed to refresh visitors:', err)
+          error: (err) => console.error('Failed to refresh visitors:', err),
         });
         this.isLoading = false;
       },
       error: (err) => {
-
         this.isLoading = false;
 
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
           detail: err.message || 'Failed to add visitor. Please try again.',
-          life: 3000
+          life: 3000,
         });
-      }
+      },
     });
   }
 
   goBackByRole(): void {
     this.navigateByRole();
   }
-
 }

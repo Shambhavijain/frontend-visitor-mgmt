@@ -5,7 +5,7 @@ import { DashboardService } from '../../shared/services/dashboard.service';
 import { VisitorService } from '../../shared/services/visitor.service';
 import { constString } from '../../shared/constants/constStr';
 import { Loader } from '../../shared/components/loader/loader';
-import { visitor } from '../../shared/models/model';
+import { usercount, visitor } from '../../shared/models/model';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 @Component({
@@ -71,17 +71,23 @@ export class DashboardComponent implements OnInit {
 
   }
   loadInitialCounts(): void {
-    this.dashboardService.getVisitorCount().subscribe(count => {
-      this.dashboardService.visitorCount.set(count);
-    });
+    this.dashboardService.getVisitorCount().subscribe({
+      next:(res:any)=>{
+this.dashboardService.visitorCount.set(res.data.count);
+      }
+    })
 
-    this.dashboardService.getGatekeeperCount().subscribe(count => {
-      this.dashboardService.gatekeeperCount.set(count);
+   
+ this.dashboardService.getUsersCount().subscribe({
+      next: (res:usercount) => {
+        this.dashboardService.gatekeeperCount.set(res.gatekeeper);
+        this.dashboardService.userCount.set(res.owner);
+      },
+      error: (err) => {
+        console.error('Failed to fetch users count:', err);
+      }
     });
-
-    this.dashboardService.getOwnerCount().subscribe(count => {
-      this.dashboardService.userCount.set(count);
-    });
+  
 
   }
 

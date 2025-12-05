@@ -97,7 +97,7 @@ export class Login {
       this.loginService.login(credentials).subscribe({
 
         next: (response) => {
-          const token = response.token;
+          const token = response.data.token;
           localStorage.setItem('authToken', token);
           const payload = JSON.parse(atob(token.split('.')[1]));
           const role = payload.role;

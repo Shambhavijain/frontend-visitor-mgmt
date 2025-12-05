@@ -27,7 +27,7 @@ export class PendingVisitors {
   }
 
   approve(visitor: any) {
-  this.visitorService.updateVisitorStatus(visitor.email, 'approved').subscribe({
+  this.visitorService.updateVisitorStatus(visitor.id, 'approved').subscribe({
     next: () => {
       console.log('Visitor approved');
       this.refreshVisitors(); // optional: refresh list
@@ -39,7 +39,7 @@ export class PendingVisitors {
 }
 
 decline(visitor: any) {
-  this.visitorService.updateVisitorStatus(visitor.email, 'declined').subscribe({
+  this.visitorService.updateVisitorStatus(visitor.id, 'declined').subscribe({
     next: () => {
       console.log('Visitor declined');
       this.refreshVisitors(); // optional: refresh list

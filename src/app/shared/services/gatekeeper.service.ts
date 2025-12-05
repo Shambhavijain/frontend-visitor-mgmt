@@ -10,12 +10,12 @@ export class GatekepeperService {
     private httpClient = inject(HttpClient)
     addGatekeeper(gatekeeperData: gatekeeper): Observable<gatekeeper> {
         return this.httpClient
-            .post<gatekeeper>(`${BASE_URL}/create-gatekeeper`, gatekeeperData);
+            .post<gatekeeper>(`${BASE_URL}/api/create_gatekeeper`, gatekeeperData);
     }
 
     listsGatekeeper(): Observable<gatekeeper[]> {
         return this.httpClient
-            .get<gatekeeper[]>(`${BASE_URL}/gatekeepers`);
+            .get<gatekeeper[]>(`${BASE_URL}/api/gatekeepers`);
     }
 
     deletegatekeeper(name: string): Observable<any> {

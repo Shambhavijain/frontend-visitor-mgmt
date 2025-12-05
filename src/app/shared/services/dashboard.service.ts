@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, signal } from "@angular/core";
 import { Observable } from "rxjs";
 import { BASE_URL } from "../constants/baseUrl";
+import { user, usercount } from "../models/model";
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +16,10 @@ export class DashboardService {
   constructor(private httpClient: HttpClient) { }
 
   getVisitorCount(): Observable<number> {
-    return this.httpClient.get<number>(`${BASE_URL}/getvisitorscount`);
+    return this.httpClient.get<number>(`${BASE_URL}/api/visitors/count`);
   }
-  getGatekeeperCount(): Observable<number> {
-    return this.httpClient.get<number>(`${BASE_URL}/getgatekeepercount`);
-  }
-  getOwnerCount(): Observable<number> {
-    return this.httpClient.get<number>(`${BASE_URL}/getownercount`);
+  getUsersCount():Observable<usercount>{
+    return this.httpClient.get<usercount>(`${BASE_URL}/api/users/owners/count`);
   }
 
 

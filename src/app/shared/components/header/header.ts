@@ -68,19 +68,19 @@ export class Header {
     localStorage.removeItem('saved-login-form');
     this.router.navigate(['/login']);
   }
-  update() {
-    const updatedUser = { email: this.email, username: this.username };
-    this.userService.updateUser(updatedUser).subscribe(() => {
-      alert('Profile updated successfully!');
+  // update() {
+  //   const updatedUser = { email: this.email, username: this.username };
+  //   this.userService.updateUser(updatedUser).subscribe(() => {
+  //     alert('Profile updated successfully!');
 
-      const modalElement = document.getElementById('exampleModal');
-      const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      if (modalInstance) {
-        modalInstance.hide();
-      }
+  //     const modalElement = document.getElementById('exampleModal');
+  //     const modalInstance = bootstrap.Modal.getInstance(modalElement);
+  //     if (modalInstance) {
+  //       modalInstance.hide();
+  //     }
 
-    });
+  //   });
 
-  }
+  // }
 
 }

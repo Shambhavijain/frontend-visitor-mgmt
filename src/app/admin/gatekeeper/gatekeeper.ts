@@ -3,7 +3,7 @@ import { NgIf, NgFor, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GatekepeperService } from '../../shared/services/gatekeeper.service';
 import { Router } from '@angular/router';
-import { gatekeeper } from '../../shared/models/model';
+import { gatekeeper, user } from '../../shared/models/model';
 import { Loader } from '../../shared/components/loader/loader';
 import { constString } from '../../shared/constants/constStr';
 import { ToastModule } from 'primeng/toast';

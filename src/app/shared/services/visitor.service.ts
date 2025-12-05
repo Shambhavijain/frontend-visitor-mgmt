@@ -33,35 +33,35 @@ export class VisitorService {
   );
 
   visitorsTodayCount = computed(() =>
-  this.visitors()?.filter(v => {
-     if (!v.created_at) return false;
+    this.visitors()?.filter(v => {
+      if (!v.created_at) return false;
 
-    const visitDate = new Date(v.created_at);
-    const today = new Date();
+      const visitDate = new Date(v.created_at);
+      const today = new Date();
 
-    return (
-      visitDate.getDate() === today.getDate() &&
-      visitDate.getMonth() === today.getMonth() &&
-      visitDate.getFullYear() === today.getFullYear()
-    );
-  }).length || 0
-);
+      return (
+        visitDate.getDate() === today.getDate() &&
+        visitDate.getMonth() === today.getMonth() &&
+        visitDate.getFullYear() === today.getFullYear()
+      );
+    }).length || 0
+  );
 
   getVisitors = this.visitors;
 
-  addVisitor(visitor: any): Observable<any> {
-    return this.httpClient.post(`${BASE_URL}/create-visitor`, visitor);
+  addVisitor(visitor: any): Observable<visitor> {
+    return this.httpClient.post<visitor>(`${BASE_URL}/api/create_visitor`, visitor);
   }
 
   getAllVisitors(): Observable<any> {
-    return this.httpClient.get(`${BASE_URL}/getvisitors`);
+    return this.httpClient.get(`${BASE_URL}/api/visitors`);
   }
 
-  updateVisitorStatus(email: string, status: string): Observable<any> {
+  updateVisitorStatus(id: string, status: string): Observable<any> {
     const payload = {
-      email: email,
+      visitor_id: id,
       status: status
     }
-    return this.httpClient.patch(`${BASE_URL}/update-visitor-status`, payload)
+    return this.httpClient.patch(`${BASE_URL}/api/update_visitor_status`, payload)
   }
 }

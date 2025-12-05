@@ -17,16 +17,16 @@ export class UserService {
   }
 
   listUsers(): Observable<any> {
-    return this.httpClient.get(`${BASE_URL}/users`);
+    return this.httpClient.get(`${BASE_URL}/api/users`);
   }
 
-  deleteUser(username: string): Observable<any> {
-    return this.httpClient.post(`${BASE_URL}/delete-user`, { username });
-  }
+  deleteUser(userId: string): Observable<any> {
+  return this.httpClient.delete(`${BASE_URL}/api/users/${userId}`);
+}
 
   getCurrentUser(): Observable<any> {
     const userId = localStorage.getItem('userId');
-    return this.httpClient.get<any>(`${BASE_URL}/users/${userId}`).pipe(
+    return this.httpClient.get<any>(`${BASE_URL}/api/users/${userId}`).pipe(
       tap(user => {
         localStorage.setItem('tower', user.tower);
         localStorage.setItem('flatNumber', user.flat_no);
@@ -34,8 +34,8 @@ export class UserService {
     );
   }
 
-  updateUser(data: { email: string, username: string }): Observable<any> {
-    const userId = localStorage.getItem('userId')
-    return this.httpClient.patch(`${BASE_URL}/update-user/${userId}`, data)
-  }
+  // updateUser(data: { email: string, username: string }): Observable<any> {
+  //   const userId = localStorage.getItem('userId')
+  //   return this.httpClient.patch(`${BASE_URL}/update-user/${userId}`, data)
+  // }
 }
