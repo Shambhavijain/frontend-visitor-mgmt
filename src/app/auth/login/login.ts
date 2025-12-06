@@ -5,7 +5,6 @@ import { LoginService } from '../../shared/services/login.service';
 import { Router, RouterModule } from '@angular/router';
 import { debounceTime } from 'rxjs';
 import { LoginRequest } from '../../shared/models/model';
-import { Loader } from '../../shared/components/loader/loader';
 import { constString } from '../../shared/constants/constStr';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -23,7 +22,7 @@ function mustfollowpattern(control: AbstractControl): ValidationErrors | null {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, Loader, ToastModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, ToastModule],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -105,6 +104,17 @@ export class Login {
 
           localStorage.setItem('userRole', role);
           localStorage.setItem('userId', user_id);
+          localStorage.removeItem('tower');
+          localStorage.removeItem('flatNumber');
+          if (role === 'owner') {
+            const tower = response.data.tower ?? null;
+            const flat = response.data.flat_no ?? null;
+
+            if (tower) localStorage.setItem('tower', tower);
+            if (flat) localStorage.setItem('flatNumber', flat);
+           
+          }
+
           localStorage.setItem('isLoggedIn', 'true');
 
           this.form.reset();

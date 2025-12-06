@@ -1,5 +1,5 @@
 export const constString = {
-    appTitle: "Welcome To Visitor Management!!",
+    appTitle: "Welcome To Visitor Management",
     login: "Login",
     donotHaveAccount: "Don't have account?",
     signup: "Signup",

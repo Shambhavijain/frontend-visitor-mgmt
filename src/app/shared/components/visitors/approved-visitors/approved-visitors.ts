@@ -22,6 +22,18 @@ export class ApprovedVisitors {
   flatNo = localStorage.getItem('flatNumber');
 
   get approvedVisitors() {
-    return this.visitorService.getVisitors().filter((v) => v.status === 'approved') || [];
+  const visitors = this.visitorService.getVisitors() || [];
+
+  if (this.userRole === 'owner') {
+    return visitors.filter(v =>
+      v.status === 'approved' &&
+      v.tower === this.tower &&
+      v.flat_no === this.flatNo
+    );
   }
+
+  // Admin / gatekeeper — show all approved visitors
+  return visitors.filter(v => v.status === 'approved');
+}
+
 }

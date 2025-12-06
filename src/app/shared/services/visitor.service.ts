@@ -7,36 +7,51 @@ import { visitor } from '../models/model';
 export class VisitorService {
   private httpClient = inject(HttpClient)
   private visitors = signal<visitor[]>([]);
-  tower = localStorage.getItem('tower')
-  flatNo = localStorage.getItem('flatNumber')
-  role = localStorage.getItem('userRole');
+  get tower() {
+    return localStorage.getItem('tower');
+  }
+
+  get flatNo() {
+    return localStorage.getItem('flatNumber');
+  }
+
+  get role() {
+    return localStorage.getItem('userRole');
+  }
 
   approvedcount = computed(() =>
-    this.visitors()
-      ?.filter(v =>
-        v.status === 'approved' &&
-        (this.role === 'owner' ? (v.tower === this.tower && v.flat_no === this.flatNo) : true)
-      ).length || 0
-  );
-  declinedcount = computed(() => this.visitors()
-    ?.filter(v =>
-      v.status === 'declined' &&
-      (this.role === 'owner' ? (v.tower === this.tower && v.flat_no === this.flatNo) : true)
-    ).length || 0
+    this.visitors().filter(v =>
+      v.status === 'approved' &&
+      (this.role === 'owner'
+        ? v.tower === this.tower && v.flat_no === this.flatNo
+        : true)
+    ).length
   );
 
-  pendingcount = computed(() => this.visitors()
-    ?.filter(v =>
+  declinedcount = computed(() =>
+    this.visitors().filter(v =>
+      v.status === 'declined' &&
+      (this.role === 'owner'
+        ? v.tower === this.tower && v.flat_no === this.flatNo
+        : true)
+    ).length
+  );
+
+  pendingcount = computed(() =>
+    this.visitors().filter(v =>
       v.status === 'pending' &&
-      (this.role === 'owner' ? (v.tower === this.tower && v.flat_no === this.flatNo) : true)
-    ).length || 0
+      (this.role === 'owner'
+        ? v.tower === this.tower && v.flat_no === this.flatNo
+        : true)
+    ).length
   );
 
   visitorsTodayCount = computed(() =>
     this.visitors()?.filter(v => {
       if (!v.created_at) return false;
+      console.log(v.created_at)
 
-      const visitDate = new Date(v.created_at);
+      const visitDate = new Date(Number(v.created_at) * 1000);
       const today = new Date();
 
       return (
@@ -49,8 +64,8 @@ export class VisitorService {
 
   getVisitors = this.visitors;
 
-  addVisitor(visitor: any): Observable<visitor> {
-    return this.httpClient.post<visitor>(`${BASE_URL}/api/create_visitor`, visitor);
+  addVisitor(visitor: any): Observable<any> {
+    return this.httpClient.post<any>(`${BASE_URL}/api/create_visitor`, visitor);
   }
 
   getAllVisitors(): Observable<any> {
@@ -64,4 +79,17 @@ export class VisitorService {
     }
     return this.httpClient.patch(`${BASE_URL}/api/update_visitor_status`, payload)
   }
+
+filterByOwner(v: visitor): boolean {
+  const role = this.role;
+
+  if (role !== 'owner' && role !== 'tenant') return true; // admin/gatekeeper → allow all
+
+  return (
+    v.tower === this.tower &&
+    v.flat_no === this.flatNo
+  );
+}
+
+  
 }

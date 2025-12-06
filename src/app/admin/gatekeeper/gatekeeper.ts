@@ -3,7 +3,7 @@ import { NgIf, NgFor, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GatekepeperService } from '../../shared/services/gatekeeper.service';
 import { Router } from '@angular/router';
-import { gatekeeper, user } from '../../shared/models/model';
+import { gatekeeper, GatekeeperApiResponse, RespGatekeeper, user } from '../../shared/models/model';
 import { Loader } from '../../shared/components/loader/loader';
 import { constString } from '../../shared/constants/constStr';
 import { ToastModule } from 'primeng/toast';
@@ -23,8 +23,8 @@ export class Gatekeeper implements OnInit {
   private messageService = inject(MessageService);
   private destroyRef = inject(DestroyRef);
   private router = inject(Router)
-  newGatekeeper: gatekeeper = { name: '', email: '', password: '', address: '' };
-  users: gatekeeper[] = [];
+  newGatekeeper: gatekeeper = { username: '', email: '', password: '', address: '' };
+  users: RespGatekeeper[] = [];
   ngOnInit(): void {
     this.showList()
   }
@@ -81,8 +81,14 @@ export class Gatekeeper implements OnInit {
     this.isLoading = true;
 
     this.gatekeeperservice.listsGatekeeper().subscribe({
-      next: (data: gatekeeper[]) => {
-        this.users = data;
+      next: (resp: GatekeeperApiResponse) => {
+        this.users = (resp.gatekeepers || []).map(g => ({
+          id: g.userid,
+          name: g.username,
+          email: g.email,
+          address: g.address
+        }));
+
         this.isLoading = false;
         this.messageService.add({
           severity: 'success',
@@ -106,38 +112,38 @@ export class Gatekeeper implements OnInit {
 
   deleteGatekeeper(index: number) {
     this.isLoading = true;
-    const gatekeepertTodelete = this.users[index].name;
-    const subscription = this.gatekeeperservice.deletegatekeeper(gatekeepertTodelete).subscribe({
-      next: (res) => {
 
-        console.log(res.message);
-        this.users.splice(index, 1);
-        this.isLoading = false;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Gatekeeper Deleted',
-          detail: res.message || 'Gatekeeper deleted successfully',
+    const useridToDelete = this.users[index].id;
 
-        });
-      },
-      error: (err) => {
-        console.error("Failed to delete Gatekeeper", err)
-        this.isLoading = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Delete Failed',
-          detail: 'Failed to delete Gatekeeper',
+    const subscription = this.gatekeeperservice.deletegatekeeper(useridToDelete)
+      .subscribe({
+        next: (res: any) => {
+          console.log(res.message);
 
-        });
-      }
-    })
+          this.users.splice(index, 1);
+          this.isLoading = false;
 
-    this.destroyRef.onDestroy(() => {
-      console.log('Destroy ref of gatekeeper component called');
-      subscription.unsubscribe()
-    })
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Gatekeeper Deleted',
+            detail: res.message || 'Gatekeeper deleted successfully',
+          });
+        },
 
+        error: (err) => {
+          console.error("Failed to delete Gatekeeper", err);
+          this.isLoading = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Delete Failed',
+            detail: 'Failed to delete gatekeeper',
+          });
+        }
+      });
+
+    this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
+
   goBack(): void {
     this.isLoading = true;
     setTimeout(() => {
@@ -148,7 +154,7 @@ export class Gatekeeper implements OnInit {
 
   resetGatekeeperForm(): gatekeeper {
     return {
-      name: '',
+      username: '',
       email: '',
       password: '',
       address: ''

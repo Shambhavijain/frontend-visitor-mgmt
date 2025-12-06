@@ -5,7 +5,7 @@
       <div>{{ constString.email }}</div>
       <div>{{ constString.tower }}</div>
       <div>{{ constString.flatno }}</div>
-      <div>{{ constString.action }}</div>
+    <div *ngIf="canModify()">{{ constString.action }}</div>
     </div>
 
     <div *ngFor="let visitor of pendingVisitors" class="visitor-row">

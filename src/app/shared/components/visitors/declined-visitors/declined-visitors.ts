@@ -21,9 +21,18 @@ export class DeclinedVisitors {
   flatNo = localStorage.getItem('flatNumber');
  
  get declinedVisitors() {
-    return this.visitorService.getVisitors().filter(v => v.status === 'declined');
+  const visitors = this.visitorService.getVisitors() || [];
+  if (this.userRole === 'owner') {
+    return visitors.filter(v =>
+      v.status === 'declined' &&
+      v.tower === this.tower &&
+      v.flat_no === this.flatNo
+    );
+  }
+   return visitors.filter(v => v.status === 'declined');
   }
 
 
+ 
 
 }

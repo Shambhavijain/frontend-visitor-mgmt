@@ -27,10 +27,6 @@ export class UserService {
   getCurrentUser(): Observable<any> {
     const userId = localStorage.getItem('userId');
     return this.httpClient.get<any>(`${BASE_URL}/api/users/${userId}`).pipe(
-      tap(user => {
-        localStorage.setItem('tower', user.tower);
-        localStorage.setItem('flatNumber', user.flat_no);
-      })
     );
   }
 

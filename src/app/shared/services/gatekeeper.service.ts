@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { gatekeeper } from "../models/model";
+import { gatekeeper, GatekeeperApiResponse } from "../models/model";
 import { BASE_URL } from "../constants/baseUrl";
 @Injectable({
     providedIn: 'root'
@@ -13,13 +13,13 @@ export class GatekepeperService {
             .post<gatekeeper>(`${BASE_URL}/api/create_gatekeeper`, gatekeeperData);
     }
 
-    listsGatekeeper(): Observable<gatekeeper[]> {
+    listsGatekeeper(): Observable<GatekeeperApiResponse> {
         return this.httpClient
-            .get<gatekeeper[]>(`${BASE_URL}/api/gatekeepers`);
+            .get<GatekeeperApiResponse>(`${BASE_URL}/api/gatekeepers`);
     }
 
-    deletegatekeeper(name: string): Observable<any> {
-        return this.httpClient
-            .post(`${BASE_URL}/delete-gatekeeper`, { username: name });
-    }
+    deletegatekeeper(userId: string): Observable<any> {
+  return this.httpClient.delete(`${BASE_URL}/api/gatekeepers/${userId}`);
+}
+
 }

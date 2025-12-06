@@ -9,12 +9,33 @@ export interface user {
 }
 
 export interface gatekeeper {
-  name: string;
+  username: string;
   email: string;
   password: string;
   address: string;
 
 }
+export interface RespGatekeeper {
+  id: string;     
+  name: string;   
+  email: string;
+  address: string;
+}
+export interface GatekeeperApiModel {
+  userid: string;
+  username: string;
+  role: string;
+  email: string;
+  address: string;
+  flat_no: string;
+  tower: string;
+}
+
+export interface GatekeeperApiResponse {
+  gatekeepers: GatekeeperApiModel[];
+  message: string;
+}
+
 
 export interface requestUser {
   name: string;

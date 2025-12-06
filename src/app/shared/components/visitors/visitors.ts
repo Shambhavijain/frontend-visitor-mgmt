@@ -97,12 +97,15 @@ export class Visitors implements OnInit {
   submitVisitorForm(userForm: NgForm): void {
     this.isLoading = true;
     this.visitorService.addVisitor(this.newVisitor).subscribe({
-      next: (createdVisitor) => {
-        console.log(createdVisitor)
+      next: (res) => {
+        console.log(res)
         const modalElement = document.getElementById('addVisitorModal');
         const modalInstance = bootstrap.Modal.getInstance(modalElement);
         if (modalInstance) modalInstance.hide();
-        this.newVisitor.id = createdVisitor.id;
+        this.newVisitor.id = res.data.id;
+        this.newVisitor.created_at = res.data.created_at; 
+        // const created_at = new Date(res.data.created_at)
+        // this.newVisitor.created_at=created_at.toLocaleString()
         // this.newVisitor.created_at=createdVisitor.created_at
         this.messageService.add({
           severity: 'success',
