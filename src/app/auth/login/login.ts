@@ -4,10 +4,13 @@ import { CommonModule } from '@angular/common';
 import { LoginService } from '../../shared/services/login.service';
 import { Router, RouterModule } from '@angular/router';
 import { debounceTime } from 'rxjs';
-import { LoginRequest } from '../../shared/models/model';
-import { constString } from '../../shared/constants/constStr';
+
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+
+import { LoginRequest } from '../../shared/models/model';
+import { constString } from '../../shared/constants/constStr';
+
 
 function noSpaceValidator(control: AbstractControl): ValidationErrors | null {
   const value = control.value || '';
@@ -45,7 +48,6 @@ export class Login {
       validators: [Validators.required, Validators.minLength(6), Validators.maxLength(12), mustfollowpattern]
     })
   });
-
 
   getEmailErrorMessage(): string | null {
     const control = this.form.controls.email;
@@ -96,23 +98,25 @@ export class Login {
       this.loginService.login(credentials).subscribe({
 
         next: (response) => {
+          console.log('Login response:', response)
           const token = response.data.token;
           localStorage.setItem('authToken', token);
           const payload = JSON.parse(atob(token.split('.')[1]));
+          console.log("payload get", payload)
           const role = payload.role;
-          const user_id = payload.user_id;
+          const user_id = payload.sub;
 
           localStorage.setItem('userRole', role);
           localStorage.setItem('userId', user_id);
           localStorage.removeItem('tower');
           localStorage.removeItem('flatNumber');
           if (role === 'owner') {
-            const tower = response.data.tower ?? null;
-            const flat = response.data.flat_no ?? null;
+            const tower = response.data.user.tower ?? null;
+            const flat = response.data.user.flat_no ?? null;
 
             if (tower) localStorage.setItem('tower', tower);
             if (flat) localStorage.setItem('flatNumber', flat);
-           
+
           }
 
           localStorage.setItem('isLoggedIn', 'true');
@@ -156,6 +160,7 @@ export class Login {
       })
     }
   }
+
   ngOnInit(): void {
 
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -181,6 +186,5 @@ export class Login {
       this.destroyRef.onDestroy(() => subscription.unsubscribe());
     }
   }
-
 
 }

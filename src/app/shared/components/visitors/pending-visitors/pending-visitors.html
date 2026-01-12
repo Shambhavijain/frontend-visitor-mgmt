@@ -1,14 +1,14 @@
-<ng-container *ngIf="pendingVisitors.length > 0; else noPendingVisitors">
+<!-- <ng-container *ngIf="pendingVisitors.length > 0; else noPendingVisitors">
   <div class="visitor-table">
     <div class="visitor-header">
       <div>{{ constString.name }}</div>
       <div>{{ constString.email }}</div>
       <div>{{ constString.tower }}</div>
       <div>{{ constString.flatno }}</div>
-    <div *ngIf="canModify()">{{ constString.action }}</div>
+      <div *ngIf="canModify()">{{ constString.action }}</div>
     </div>
 
-    <div *ngFor="let visitor of pendingVisitors" class="visitor-row">
+    <div *ngFor="let visitor of paginatedVisitors" class="visitor-row">
       <div class="visitor-name">
         <img [src]="constString.visitorAvatariconimg" alt="Avatar" class="avatar" />
         {{ visitor.name }}
@@ -26,11 +26,85 @@
       </div>
     </div>
   </div>
+
+  <div class="pagination-container">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">
+      Prev
+    </button>
+
+    <button *ngFor="let _ of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
+      [class.active]="currentPage === i + 1">
+      {{ i + 1 }}
+    </button>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+      Next
+    </button>
+  </div>
 </ng-container>
 
 <ng-template #noPendingVisitors>
   <div class="empty-background">
     <img [src]="constString.backgroundicon" alt="Background Icon" class="background-icon" />
     <p class="no-data-text">{{ constString.nopendingVisitorFound }}</p>
+  </div>
+</ng-template> -->
+
+<ng-container *ngIf="pendingVisitors().length > 0; else noPendingVisitors">
+
+  <div class="visitor-table">
+    <div class="visitor-header">
+      <div>{{ constString.name }}</div>
+      <div>{{ constString.email }}</div>
+      <div>{{ constString.tower }}</div>
+      <div>{{ constString.flatno }}</div>
+      <div *ngIf="canModify()">{{ constString.action }}</div>
+    </div>
+
+    <div *ngFor="let visitor of paginatedVisitors()" class="visitor-row">
+      <div class="visitor-name">
+        <img [src]="constString.visitorAvatariconimg" alt="Avatar" class="avatar" />
+        {{ visitor.name }}
+      </div>
+
+      <div>{{ visitor.email }}</div>
+      <div>{{ visitor.tower }}</div>
+      <div>{{ visitor.flat_no }}</div>
+
+      <div *ngIf="canModify()" class="action-buttons">
+        <button type="button" class="btn btn-success btn-sm me-2" (click)="approve(visitor)">
+          {{ constString.approve }}
+        </button>
+
+        <button  type="button" class="btn btn-danger btn-sm" (click)="decline(visitor)">
+          {{ constString.decline }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagination-container">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">
+      Prev
+    </button>
+
+    <button *ngFor="let _ of [].constructor(totalPages()); let i = index" (click)="changePage(i + 1)"
+      [class.active]="currentPage === i + 1">
+      {{ i + 1 }}
+    </button>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages()">
+      Next
+    </button>
+  </div>
+
+</ng-container>
+
+<ng-template #noPendingVisitors>
+  <div class="empty-background">
+    <img [src]="constString.backgroundicon" alt="Background Icon" class="background-icon" />
+    <p class="no-data-text">
+      {{ constString.nopendingVisitorFound }}
+    </p>
   </div>
 </ng-template>

@@ -1,15 +1,15 @@
 .user-management-container {
-   margin-left: 2%;
-   margin-top: 2%;
+  margin-left: 2%;
+  margin-top: 2%;
   display: flex;
- font-size: 1rem; 
- margin-right:5%; 
+  font-size: 1rem;
+  margin-right: 5%;
 }
 
 .sidebar-container {
   display: flex;
-  gap: 4px; 
-  padding: 0.2rem; 
+  gap: 4px;
+  padding: 0.2rem;
 }
 
 .sidebar button,
@@ -31,7 +31,7 @@
 }
 
 
-.heading-h2{
+.heading-h2 {
   font-size: 24px;
   margin-left: 4%;
   font-family: 'Times New Roman', Times, serif, Impact, 'Arial Narrow Bold', sans-serif;
@@ -40,8 +40,9 @@
 
 .content {
   flex: 1;
-  padding: 0.75rem;
+  padding: 0.8rem;
 }
+
 
 /* Form */
 .user-form {
@@ -122,7 +123,7 @@
   background: white;
   width: 100%;
   max-width: 320px;
-  padding: 0.75rem;  
+  padding: 0.75rem;
   border-radius: 8px;
   font-size: 0.85rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -183,6 +184,7 @@
   border: 1px solid #2e7d32;
   border-radius: 4px;
 }
+
 .delete-icon {
   width: 18px;
   height: 18px;
@@ -248,22 +250,24 @@
   border-radius: 6px;
   overflow-x: auto;
   max-height: 500px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+
 .back-button-container {
   position: absolute;
-  top: 95px; 
+  top: 95px;
   right: 20px;
-  z-index: 1000;
+  z-index: 100;
 }
+
 .back-button {
-  background-color: #e6f0ff; 
-  border: 1px solid #99c2ff; 
-  border-radius: 6px; 
-  padding: 6px 14px;
-  font-size: 14px;
+  background-color: #67a9ea;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 14px;
+  font-size: 14.5px;
   font-weight: 500;
-  color: #0056b3;
+  color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -272,3 +276,57 @@
   background-color: #cce0ff;
 }
 
+.p-toast {
+  bottom: 20px !important;
+  top: auto !important;
+  right: 20px !important;
+  z-index: 9999 !important;
+}
+
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.pagination-container button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background-color: #ffffff;
+  color: #333;
+  cursor: pointer;
+  border-radius: 4px;
+  min-width: 36px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.pagination-container button:hover:not(:disabled) {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.pagination-container button.active {
+  background-color: #007bff;
+  color: #ffffff;
+  border-color: #007bff;
+  font-weight: 600;
+}
+
+.pagination-container button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+
+.text-danger {
+  font-size: 0.85rem;
+  margin-top: 4px;
+}

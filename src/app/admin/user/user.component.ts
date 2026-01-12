@@ -3,72 +3,76 @@ import { NgIf, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../shared/services/user.service';
 import { Router } from '@angular/router';
-import { user } from '../../shared/models/model';
-import { Loader } from '../../shared/components/loader/loader';
-import { constString } from '../../shared/constants/constStr';
+
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+
+import { Loader } from '../../shared/components/loader/loader';
+import { constString } from '../../shared/constants/constStr';
+import { ApiResponse } from '../../shared/models/api.response.model';
+import { User } from '../../shared/models/user.model';
 
 
 @Component({
   selector: 'app-user',
-  imports: [FormsModule,CommonModule, Loader, ToastModule],
-  templateUrl: './user.html',
-  styleUrl: './user.css',
+  imports: [FormsModule, CommonModule, Loader, ToastModule],
+  templateUrl: './user.component.html',
+  styleUrl: './user.component.css',
   providers: [MessageService]
 })
-export class User implements OnInit {
+export class UserComponent implements OnInit {
   constString = constString
   isLoading = false;
   private destroyRef = inject(DestroyRef);
   private messageService = inject(MessageService);
-  // showSuccessMessage = false;
 
-  users: user[] = [];
+  users: User[] = [];
+
   constructor(private userService: UserService, private router: Router) { }
-
+  pageSize = 5;
+  currentPage = 1;
   ngOnInit(): void {
     this.showList();
   }
   showList(): void {
-    // this.showSuccessMessage = false;
-    this.isLoading = true
+    this.isLoading = true;
+
     const subscription = this.userService.listUsers().subscribe({
-      next: (data: any[]) => {
-        this.users = data.map(user => ({
-          id:user.userid,
-          name: user.username,
-          email: user.email,
-          role: user.role,
-          address: user.address,
-          flat_no: user.flat_no,
-          tower: user.tower
+      next: (response: ApiResponse<User[]>) => {
+        const usersData = response?.data ?? [];
+
+        this.users = usersData.map((u: User) => ({
+          id: u.id ?? '',
+          username: u.username ?? '',
+          email: u.email ?? '',
+          role: u.role ?? '',
+          address: u.address ?? '',
+          flat_no: u.flat_no ?? '',
+          tower: u.tower ?? '',
         }));
+        this.currentPage = 1;
+
+
         this.isLoading = false;
 
         this.messageService.add({
           severity: 'success',
           summary: 'Users Loaded',
-          detail: 'User list fetched successfully',
-            
+          detail: response.message || 'User list fetched successfully',
         });
-
       },
+
       error: () => {
         this.isLoading = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
           detail: 'Failed to load users',
-            
         });
-
       }
+    });
 
-    });
-    this.destroyRef.onDestroy(() => {
-      subscription.unsubscribe()
-    });
+    this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
 
   deleteUser(index: number): void {
@@ -78,13 +82,13 @@ export class User implements OnInit {
       next: (res) => {
         console.log(res.message);
         this.users.splice(index, 1);
-        
+
         this.isLoading = false;
         this.messageService.add({
           severity: 'success',
           summary: 'User Deleted',
           detail: res.message || 'User deleted successfully',
-           
+
         });
       },
       error: () => {
@@ -93,7 +97,7 @@ export class User implements OnInit {
           severity: 'error',
           summary: 'Delete Failed',
           detail: 'Failed to delete user',
-           
+
         });
       }
     });
@@ -105,7 +109,32 @@ export class User implements OnInit {
     this.router.navigate(['/admin-dashboard']);
   }
 
-  
+
+get totalPages(): number {
+  return Math.ceil(this.users.length / this.pageSize);
+}
+
+get paginatedUsers(): User[] {
+  const start = (this.currentPage - 1) * this.pageSize;
+  return this.users.slice(start, start + this.pageSize);
+}
+
+changePage(page: number) {
+  this.currentPage = page;
+}
+
+nextPage() {
+  if (this.currentPage < this.totalPages) {
+    this.currentPage++;
+  }
+}
+
+prevPage() {
+  if (this.currentPage > 1) {
+    this.currentPage--;
+  }
+}
+
 
 }
 

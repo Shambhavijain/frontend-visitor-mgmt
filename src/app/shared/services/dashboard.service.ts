@@ -1,8 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, signal } from "@angular/core";
 import { Observable } from "rxjs";
+
 import { BASE_URL } from "../constants/baseUrl";
-import { user, usercount } from "../models/model";
+import { ApiResponse } from "../models/api.response.model";
+import { UserCount } from "../models/user.model";
+import { VisitorCount } from "../models/visitor.model";
 
 @Injectable({
   providedIn: 'root'
@@ -15,38 +18,11 @@ export class DashboardService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getVisitorCount(): Observable<number> {
-    return this.httpClient.get<number>(`${BASE_URL}/api/visitors/count`);
+  getVisitorCount(): Observable<ApiResponse<VisitorCount>> {
+    return this.httpClient.get<ApiResponse<VisitorCount>>(`${BASE_URL}/visitor/count`);
   }
-  getUsersCount():Observable<usercount>{
-    return this.httpClient.get<usercount>(`${BASE_URL}/api/users/owners/count`);
+  getUsersCount():Observable<ApiResponse<UserCount>>{
+    return this.httpClient.get<ApiResponse<UserCount>>(`${BASE_URL}/users/count`);
   }
-
-
-
-
-  // incrementVisitor(): void {
-  //   this.visitorCount.update(count => count + 1);
-  // }
-
-  // decrementVisitor(): void {
-  //   this.visitorCount.update(count => count - 1);
-  // }
-
-
-  // incrementGatekeeper(): void {
-  //   this.visitorCount.update(count => count + 1);
-  // }
-
-  // decrementGatekeeper(): void {
-  //   this.visitorCount.update(count => count - 1);
-  // }
-  // incrementOwner(): void {
-  //   this.visitorCount.update(count => count + 1);
-  // }
-
-  // decrementOwner() {
-  //   this.visitorCount.update(count => count - 1);
-  // }
 
 }

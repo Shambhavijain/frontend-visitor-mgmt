@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { FormsModule } from '@angular/forms';
 import { constString } from '../../constants/constStr';
-
+import { User } from '../../models/user.model';
+import { ApiResponse } from '../../models/api.response.model';
 declare var bootstrap: any;
 
 @Component({
@@ -16,16 +17,16 @@ declare var bootstrap: any;
 })
 
 export class Header {
-   showDropdown = false;
- 
+  showDropdown = false;
 
-  toggleDropDown(event:MouseEvent):void{
+
+  toggleDropDown(event: MouseEvent): void {
     event.stopPropagation();
-    this.showDropdown=!this.showDropdown
+    this.showDropdown = !this.showDropdown
   }
   @HostListener('document:click')
-  closeDropDown():void{
-    this.showDropdown=false;
+  closeDropDown(): void {
+    this.showDropdown = false;
   }
 
   constString = constString
@@ -39,28 +40,28 @@ export class Header {
   userIconPath = '/icon.png';
   update_profile = '/Update_profile.png'
   user_logout = '/Logout_User.png'
- 
+
 
   email: string = '';
   username: string = '';
 
 
   ngOnInit() {
-   
     if (this.role === 'owner') {
-      this.userService.getCurrentUser().subscribe(user => {
-        this.email = user.email;
-        this.username = user.username;
-        console.log(this.email);
-        console.log(this.username);
-        this.email = '';
-        this.username = '';
+      this.userService.getCurrentUser().subscribe({
+        next: (res: ApiResponse<User>) => {
+          const user = res.data;
+          this.email = user.email;
+          this.username = user.username;
+          this.email = '';
+          this.username = '';
+        },
+        error: (err) => {
+          console.error('Failed to fetch user', err);
+        }
       });
     }
   }
-
-
- 
 
   logout() {
     localStorage.clear();

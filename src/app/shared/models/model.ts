@@ -38,12 +38,12 @@ export interface GatekeeperApiResponse {
 
 
 export interface requestUser {
-  name: string;
-  email: string;
-  password: string;
-  address: string;
-  flat_no: string;
-  tower: string;
+  Name: string;
+  Email: string;
+  Password: string;
+  Address: string;
+  FlatNo: string;
+  Tower: string;
 }
 
 export interface LoginRequest {
@@ -61,6 +61,6 @@ export interface visitor {
 
 }
 export type usercount= {
-  owner: number,
-  gatekeeper:number;
+  Owner: number,
+  Gatekeeper:number;
 }

@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 <div class="dashboard-layout">
   <div class="main-content">
-    <!-- Sidebar -->
+
     <aside class="sidebar">
       <ul>
         @if (isAdmin) {
@@ -70,35 +70,34 @@
           <h3>
             {{constString.visitorsToday}}</h3>
           <p>{{visitorService.visitorsTodayCount()}}</p>
-          <!-- <p>{{0}}</p>  static -->
         </div>
       </div>
     </div>
 
     <div class="recent-visitors-container">
-  <h3>Recent Visitors</h3>
-  <div class="visitor-cards">
-    <div class="visitor-card" *ngFor="let visitor of lastFiveVisitors">
-      
-<div class="card-header">
-    <span class="visit-time">{{ visitor.created_at | date:'short' }}</span>
-  </div>
+      <h3>Recent Visitors</h3>
+      <div class="visitor-cards">
+        <div class="visitor-card" *ngFor="let visitor of lastFiveVisitors">
 
-      <div class="visitor-info">
-        <p><strong>Name:</strong> {{ visitor.name }}</p>
-        <p><strong>Flat:</strong> {{ visitor.tower }}-{{ visitor.flat_no }}</p>
+          <div class="card-header">
+            <span class="visit-time">{{ visitor.created_at | date:'short' }}</span>
+          </div>
 
-      </div>
-      <div class="visitor-status" [ngClass]="{
-        'approved': visitor.status === 'approved',
-        'declined': visitor.status === 'declined',
-        'pending': visitor.status === 'pending'
+          <div class="visitor-info">
+            <p><strong>Name:</strong> {{ visitor.name }}</p>
+            <p><strong>Flat:</strong> {{ visitor.tower }}-{{ visitor.flat_no }}</p>
+
+          </div>
+          <div class="visitor-status" [ngClass]="{
+        'approved': visitor.status === VisitorStatus.APPROVED,
+        'declined': visitor.status === VisitorStatus.DECLINED,
+        'pending': visitor.status === VisitorStatus.PENDING
       }">
-        {{ visitor.status | titlecase }}
+            {{ visitor.status | titlecase }}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
 
 
@@ -131,24 +130,27 @@
     </div>
 
     <div class="recent-visitors-container">
-  <h3>Recent Visitors</h3>
-  <div class="visitor-cards">
-    <div class="visitor-card" *ngFor="let visitor of lastFiveVisitors">
-      <div class="visitor-info">
-        <p><strong>Name:</strong> {{ visitor.name }}</p>
-        <p><strong>Flat:</strong> {{ visitor.tower }}-{{ visitor.flat_no }}</p>
-        <p><strong>Time:</strong> {{ visitor.created_at | date:'short' }}</p>
-      </div>
-      <div class="visitor-status" [ngClass]="{
-        'approved': visitor.status === 'approved',
-        'declined': visitor.status === 'declined',
-        'pending': visitor.status === 'pending'
+      <h3>Recent Visitors</h3>
+      <div class="visitor-cards">
+        <div class="visitor-card" *ngFor="let visitor of lastFiveVisitors">
+          <div class="card-header">
+            <span class="visit-time">{{ visitor.created_at | date:'short' }}</span>
+          </div>
+
+          <div class="visitor-info">
+            <p><strong>Name:</strong> {{ visitor.name }}</p>
+            <p><strong>Flat:</strong> {{ visitor.tower }}-{{ visitor.flat_no }}</p>
+          </div>
+          <div class="visitor-status" [ngClass]="{
+                'approved': visitor.status === VisitorStatus.APPROVED,
+                'declined': visitor.status === VisitorStatus.DECLINED,
+              'pending': visitor.status === VisitorStatus.PENDING
       }">
-        {{ visitor.status | titlecase }}
+            {{ visitor.status | titlecase }}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
   </div>
 
@@ -178,25 +180,28 @@
       </div>
 
 
-    <div class="recent-visitors-container">
-  <h3>Recent Visitors</h3>
-  <div class="visitor-cards">
-    <div class="visitor-card" *ngFor="let visitor of lastFiveVisitors">
-      <div class="visitor-info">
-        <p><strong>Name:</strong> {{ visitor.name }}</p>
-        <p><strong>Flat:</strong> {{ visitor.tower }}-{{ visitor.flat_no }}</p>
-        <p><strong>Time:</strong> {{ visitor.created_at | date:'short' }}</p>
-      </div>
-      <div class="visitor-status" [ngClass]="{
-        'approved': visitor.status === 'approved',
-        'declined': visitor.status === 'declined',
-        'pending': visitor.status === 'pending'
+      <div class="recent-visitors-container">
+        <h3>Recent Visitors</h3>
+        <div class="visitor-cards">
+          <div class="visitor-card" *ngFor="let visitor of lastFiveVisitors">
+            <div class="card-header">
+              <span class="visit-time">{{ visitor.created_at | date:'short' }}</span>
+            </div>
+
+            <div class="visitor-info">
+              <p><strong>Name:</strong> {{ visitor.name }}</p>
+              <p><strong>Flat:</strong> {{ visitor.tower }}-{{ visitor.flat_no }}</p>
+            </div>
+            <div class="visitor-status" [ngClass]="{
+              'approved': visitor.status === VisitorStatus.APPROVED,
+              'declined': visitor.status === VisitorStatus.DECLINED,
+              'pending': visitor.status === VisitorStatus.PENDING
       }">
-        {{ visitor.status | titlecase }}
+              {{ visitor.status | titlecase }}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
 
 
     </div>

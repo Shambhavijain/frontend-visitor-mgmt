@@ -7,9 +7,11 @@ import { ApprovedVisitors } from './approved-visitors/approved-visitors';
 import { DeclinedVisitors } from './declined-visitors/declined-visitors';
 import { PendingVisitors } from './pending-visitors/pending-visitors';
 import { constString } from '../../constants/constStr';
-import { visitor } from '../../models/model';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { ApiResponse } from '../../models/api.response.model';
+import { Visitor, CreateVisitorRequest } from '../../models/visitor.model';
+import { VisitorStatus } from '../../enum/enum';
 
 declare var bootstrap: any;
 @Component({
@@ -36,20 +38,21 @@ export class Visitors implements OnInit {
   private router = inject(Router);
   private messageService = inject(MessageService);
 
-  newVisitor: visitor = {
+
+  newVisitor: Visitor = {
     id: '',
     name: '',
     email: '',
     tower: '',
     flat_no: '',
-    status: 'pending',
+    status: VisitorStatus.PENDING,
   };
 
   isLoading = true;
   ngOnInit(): void {
     this.visitorService.getAllVisitors().subscribe({
-      next: (data) => {
-        this.visitorService.getVisitors.set(data);
+      next: (res: ApiResponse<Visitor[]>) => {
+        this.visitorService.getVisitors.set(res.data);
         this.isLoading = false;
 
         this.messageService.add({
@@ -60,8 +63,8 @@ export class Visitors implements OnInit {
         });
       },
       error: (err) => {
-        console.error('Failed to fetch visitors:', err);
         this.isLoading = false;
+        console.error('Failed to fetch visitors:', err);
 
         this.messageService.add({
           severity: 'error',
@@ -97,16 +100,14 @@ export class Visitors implements OnInit {
   submitVisitorForm(userForm: NgForm): void {
     this.isLoading = true;
     this.visitorService.addVisitor(this.newVisitor).subscribe({
-      next: (res) => {
+      next: (res: ApiResponse<Visitor>) => {
         console.log(res)
         const modalElement = document.getElementById('addVisitorModal');
         const modalInstance = bootstrap.Modal.getInstance(modalElement);
         if (modalInstance) modalInstance.hide();
         this.newVisitor.id = res.data.id;
-        this.newVisitor.created_at = res.data.created_at; 
-        // const created_at = new Date(res.data.created_at)
-        // this.newVisitor.created_at=created_at.toLocaleString()
-        // this.newVisitor.created_at=createdVisitor.created_at
+        this.newVisitor.created_at = res.data.created_at;
+
         this.messageService.add({
           severity: 'success',
           summary: 'Visitor Added',
@@ -116,7 +117,7 @@ export class Visitors implements OnInit {
         userForm.resetForm();
 
         this.visitorService.getAllVisitors().subscribe({
-          next: (data) => this.visitorService.getVisitors.set(data),
+          next: (res: ApiResponse<Visitor[]>) => this.visitorService.getVisitors.set(res.data),
           error: (err) => console.error('Failed to refresh visitors:', err),
         });
         this.isLoading = false;
@@ -137,4 +138,20 @@ export class Visitors implements OnInit {
   goBackByRole(): void {
     this.navigateByRole();
   }
+  onCancel(form: NgForm): void {
+    form.resetForm();
+
+    this.newVisitor = {
+      id: '',
+      name: '',
+      email: '',
+      tower: '',
+      flat_no: '',
+      status: VisitorStatus.PENDING,
+    };
+  }
+switchTab(tab: 'approved' | 'declined' | 'pending') {
+  this.activeTab = tab;
+}
+
 }

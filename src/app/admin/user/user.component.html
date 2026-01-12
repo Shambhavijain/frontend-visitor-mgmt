@@ -1,0 +1,64 @@
+<p-toast></p-toast>
+
+<div class="user-management-container">
+  <div class="content">
+    <div class="back-button-container">
+      <button class="back-button" (click)="goBack()">{{constString.backicon}}</button>
+    </div>
+    <h2 class="heading-h2">{{constString.userListTitle}}</h2>
+
+    <div class="table-wrapper">
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>{{constString.srno}}</th>
+            <th>{{constString.name}}</th>
+            <th>{{constString.email}}</th>
+            <th>{{constString.address}}</th>
+            <th>{{constString.flatno}}</th>
+            <th>{{constString.tower}}</th>
+            <th>{{constString.action}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of paginatedUsers; let i = index">
+            <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.address }}</td>
+            <td>{{ user.flat_no || '-' }}</td>
+            <td>{{ user.tower || '-' }}</td>
+            <td>
+              <button class="delete-button" (click)="deleteUser(i)"><img [src]="constString.deleteicon" alt="User Icon"
+                  class="delete-icon">
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pagination-container" >
+        <button (click)="prevPage()" [disabled]="currentPage === 1">
+          Prev
+        </button>
+
+        <button *ngFor="let _ of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
+          [class.active]="currentPage === i + 1">
+          {{ i + 1 }}
+        </button>
+
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+          Next
+        </button>
+      </div>
+
+    </div>
+
+
+    @if (isLoading) {
+    <div class="loading-overlay">
+      <app-loader [isLoading]="isLoading"></app-loader>
+    </div>
+    }
+  </div>
+
+</div>

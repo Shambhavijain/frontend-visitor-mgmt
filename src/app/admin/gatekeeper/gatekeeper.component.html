@@ -1,0 +1,172 @@
+<p-toast></p-toast>
+<div class="user-management-container">
+
+
+  <div class="sidebar-conatiner">
+    <div class="sidebar">
+      <button (click)="openAddGatekeeperModal()">{{constString.addGatekeeper}}</button>
+    </div>
+  </div>
+
+  <div class="back-button-container" style="text-align: right; margin: 10px 20px;">
+    <button class="back-button" (click)="goBack()">{{constString.backicon}}</button>
+  </div>
+
+  <div class="content">
+    <div class="modal" *ngIf="showAddGatekeeperModal">
+      <div class="modal-content">
+        <h3>{{constString.addGatekeeper}}</h3>
+        <form (ngSubmit)="submitGatekeeperForm()" #userForm="ngForm" class="user-form" autocomplete="off">
+
+          <div class="form-row">
+
+            <label>
+              {{ constString.name }}
+              <input type="text" [(ngModel)]="newGatekeeper.username" name="name" #name="ngModel" required
+                pattern="^[A-Za-z ]+$" autocomplete="off" />
+            </label>
+
+            <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger">
+              <div *ngIf="name.errors?.['required']">
+                Name is required
+              </div>
+              <div *ngIf="!name.errors?.['required'] && name.errors?.['pattern']">
+                Name must contain only letters
+              </div>
+            </div>
+
+
+            <label>
+              {{ constString.email }}
+              <input type="email" [(ngModel)]="newGatekeeper.email" name="email" #email="ngModel" required email
+                autocomplete="off" />
+            </label>
+
+            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+              <div *ngIf="email.errors?.['required']">
+                Email is required
+              </div>
+              <div *ngIf="!email.errors?.['required'] && email.errors?.['email']">
+                Enter a valid email address
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+
+            <label>
+              {{ constString.password }}
+              <input type="password" [(ngModel)]="newGatekeeper.password" name="password" #password="ngModel" required
+                minlength="6" autocomplete="new-password" />
+            </label>
+
+            <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-danger">
+              <div *ngIf="password.errors?.['required']">
+                Password is required
+              </div>
+              <div *ngIf="!password.errors?.['required'] && password.errors?.['minlength']">
+                Password length must be at least 6  with 1 (number & small character)
+              </div>
+            </div>
+
+
+            <label>
+              {{ constString.address }}
+              <input type="text" [(ngModel)]="newGatekeeper.address" name="address" #address="ngModel" required
+                autocomplete="off" />
+            </label>
+
+            <div *ngIf="address.invalid && (address.dirty || address.touched)" class="text-danger">
+              Address is required
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" [disabled]="userForm.invalid">
+              {{ constString.submit }}
+            </button>
+            <button type="button" (click)="closeAddGatekeeperModal()">
+              {{ constString.cancel }}
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+
+
+    <div class="user-management-container">
+      <div class="content">
+
+        <h2 class="heading-h2">
+          {{constString.gatekeeperListTitle}} </h2>
+        <div class="table-wrapper">
+          <table class="user-table">
+            <thead>
+              <tr>
+                <th>{{constString.srno}}</th>
+                <th>{{constString.name}}</th>
+                <th>{{constString.email}}</th>
+                <th>{{constString.address}}</th>
+                <th>{{constString.action}}</th>
+              </tr>
+            </thead>
+            <!-- <tbody>
+              <tr *ngFor="let user of users; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.address }}</td>
+                <td>
+                  <button class="delete-button" (click)="deleteGatekeeper(i)"><img [src]="constString.deleteicon"
+                      alt="User Icon" class="delete-icon">
+                  </button>
+                </td>
+              </tr>
+            </tbody> -->
+            <tbody>
+              <tr *ngFor="let user of paginatedUsers; let i = index">
+                <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.address }}</td>
+                <td>
+                  <button class="delete-button" (click)="deleteGatekeeper(i)">
+                    <img [src]="constString.deleteicon" alt="Delete" class="delete-icon">
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+
+          <div class="pagination-container" >
+
+            <button (click)="prevPage()" [disabled]="currentPage === 1">
+              Prev
+            </button>
+
+            <button *ngFor="let _ of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
+              [class.active]="currentPage === i + 1">
+              {{ i + 1 }}
+            </button>
+
+            <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+              Next
+            </button>
+
+          </div>
+        </div>
+
+
+        @if (isLoading) {
+        <div class="loading-overlay">
+          <app-loader [isLoading]="isLoading"></app-loader>
+        </div>
+        }
+      </div>
+      
+
+    </div>

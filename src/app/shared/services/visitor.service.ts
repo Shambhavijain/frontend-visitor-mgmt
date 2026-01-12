@@ -1,50 +1,38 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { BASE_URL } from '../constants/baseUrl';
 import { Observable } from 'rxjs';
-import { visitor } from '../models/model';
+import { map } from 'rxjs';
+
+import { BASE_URL } from '../constants/baseUrl';
+import { ApiResponse } from '../models/api.response.model';
+import { VisitorStatus } from '../enum/enum';
+import { Visitor, CreateVisitorRequest, UpdateVisitorRequest } from '../models/visitor.model';
+
 @Injectable({ providedIn: 'root' })
+
 export class VisitorService {
   private httpClient = inject(HttpClient)
-  private visitors = signal<visitor[]>([]);
-  get tower() {
-    return localStorage.getItem('tower');
-  }
+  private visitors = signal<Visitor[]>([]);
 
-  get flatNo() {
-    return localStorage.getItem('flatNumber');
-  }
 
   get role() {
     return localStorage.getItem('userRole');
   }
 
+
+
   approvedcount = computed(() =>
-    this.visitors().filter(v =>
-      v.status === 'approved' &&
-      (this.role === 'owner'
-        ? v.tower === this.tower && v.flat_no === this.flatNo
-        : true)
-    ).length
+    this.visitors().filter(v => v.status === VisitorStatus.APPROVED).length
   );
 
   declinedcount = computed(() =>
-    this.visitors().filter(v =>
-      v.status === 'declined' &&
-      (this.role === 'owner'
-        ? v.tower === this.tower && v.flat_no === this.flatNo
-        : true)
-    ).length
+    this.visitors().filter(v => v.status === VisitorStatus.DECLINED).length
   );
 
   pendingcount = computed(() =>
-    this.visitors().filter(v =>
-      v.status === 'pending' &&
-      (this.role === 'owner'
-        ? v.tower === this.tower && v.flat_no === this.flatNo
-        : true)
-    ).length
+    this.visitors().filter(v => v.status === VisitorStatus.PENDING).length
   );
+
 
   visitorsTodayCount = computed(() =>
     this.visitors()?.filter(v => {
@@ -64,32 +52,24 @@ export class VisitorService {
 
   getVisitors = this.visitors;
 
-  addVisitor(visitor: any): Observable<any> {
-    return this.httpClient.post<any>(`${BASE_URL}/api/create_visitor`, visitor);
+  addVisitor(visitor: CreateVisitorRequest): Observable<ApiResponse<Visitor>> {
+    return this.httpClient.post<ApiResponse<Visitor>>(`${BASE_URL}/visitor/create`, visitor);
   }
 
-  getAllVisitors(): Observable<any> {
-    return this.httpClient.get(`${BASE_URL}/api/visitors`);
+  getAllVisitors(): Observable<ApiResponse<Visitor[]>> {
+    return this.httpClient.get<ApiResponse<Visitor[]>>(`${BASE_URL}/visitor/`)
   }
 
-  updateVisitorStatus(id: string, status: string): Observable<any> {
-    const payload = {
-      visitor_id: id,
-      status: status
-    }
-    return this.httpClient.patch(`${BASE_URL}/api/update_visitor_status`, payload)
+
+  updateVisitorStatus(payload: UpdateVisitorRequest): Observable<any> {
+    const apiPayload = {
+      ...payload,
+      status: payload.status.toLowerCase(), // 🔥 ADAPT HERE
+    };
+
+    return this.httpClient.patch(`${BASE_URL}/visitor/status`, apiPayload);
   }
 
-filterByOwner(v: visitor): boolean {
-  const role = this.role;
 
-  if (role !== 'owner' && role !== 'tenant') return true; // admin/gatekeeper → allow all
 
-  return (
-    v.tower === this.tower &&
-    v.flat_no === this.flatNo
-  );
-}
-
-  
 }

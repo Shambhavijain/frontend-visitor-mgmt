@@ -1,4 +1,4 @@
-<ng-container *ngIf="declinedVisitors.length > 0; else noApprovedVisitors">
+<!-- <ng-container *ngIf="declinedVisitors.length > 0; else noApprovedVisitors">
   <div class="visitor-table">
     <div class="visitor-header">
       <div>{{ constString.name }}</div>
@@ -24,5 +24,54 @@
   <div class="empty-background">
     <img [src]="constString.backgroundicon" alt="Background Icon" class="background-icon" />
     <p class="no-data-text">{{ constString.nodeclineVisitorFound}}</p>
+  </div>
+</ng-template> -->
+
+<ng-container *ngIf="declinedVisitors.length > 0; else noDeclinedVisitors">
+  <div class="visitor-table">
+
+    <!-- HEADER -->
+    <div class="visitor-header">
+      <div>{{ constString.name }}</div>
+      <div>{{ constString.email }}</div>
+      <div>{{ constString.tower }}</div>
+      <div>{{ constString.flatno }}</div>
+    </div>
+
+    <div *ngFor="let visitor of paginatedVisitors" class="visitor-row">
+      <div class="visitor-name">
+        <img [src]="constString.visitorAvatariconimg" alt="Avatar" class="avatar" />
+        {{ visitor.name }}
+      </div>
+      <div>{{ visitor.email }}</div>
+      <div>{{ visitor.tower }}</div>
+      <div>{{ visitor.flat_no }}</div>
+    </div>
+
+  </div>
+
+  <div class="pagination-container" >
+    <button (click)="prevPage()" [disabled]="currentPage === 1">
+      Prev
+    </button>
+
+    <button *ngFor="let _ of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
+      [class.active]="currentPage === i + 1">
+      {{ i + 1 }}
+    </button>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+      Next
+    </button>
+  </div>
+  
+</ng-container>
+
+<ng-template #noDeclinedVisitors>
+  <div class="empty-background">
+    <img [src]="constString.backgroundicon" alt="Background Icon" class="background-icon" />
+    <p class="no-data-text">
+      {{ constString.nodeclineVisitorFound }}
+    </p>
   </div>
 </ng-template>

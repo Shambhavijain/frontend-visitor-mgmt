@@ -16,9 +16,18 @@
     <div class="mb-3">
       <label for="email" class="form-label">{{constString.email}}</label>
       <input id="email" type="email" class="form-control" formControlName="email" placeholder="Enter your email" />
-      <div *ngIf="getEmailValid()" class="text-danger">
-        {{constString.validEmailRequired}}
+      <div *ngIf="isInvalid(emailCtrl)" class="text-danger">
+        <div *ngIf="emailCtrl?.errors?.['required']">
+          Email is required
+        </div>
+        <div *ngIf="emailCtrl?.errors?.['email']">
+          Email must contain @ and a valid domain
+        </div>
+        <div *ngIf="emailCtrl?.errors?.['emailExists']">
+          This email is already registered
+        </div>
       </div>
+
     </div>
 
 
@@ -26,18 +35,39 @@
       <label for="password" class="form-label">{{constString.password}}</label>
       <input id="password" type="password" class="form-control" formControlName="password"
         placeholder="Enter password" />
-      <div *ngIf="getPasswordValid()" class="text-danger">
-        {{constString.passwordRequirement}}
+      <div *ngIf="isInvalid(passwordCtrl)" class="text-danger">
+
+        <div *ngIf="passwordCtrl?.errors?.['required']">
+          {{constString.passwordRequired}}
+        </div>
+
+        <div *ngIf="passwordCtrl?.errors?.['minlength']">
+          {{constString.passwordRequirement}}
+        </div>
+
+        <div *ngIf="passwordCtrl?.errors?.['pattern']">
+          {{constString.passwordContain}}
+          <ul class="mb-0">
+            <li>{{constString.lowercaseLetter}}</li>
+            <li>{{constString.containNumber}}</li>
+          </ul>
+        </div>
+
       </div>
+
     </div>
 
     <div class="mb-3">
       <label for="confirmpassword" class="form-label">{{constString.confirmPassword}}</label>
       <input id="confirmpassword" type="password" class="form-control" formControlName="confirmpassword"
         placeholder="Confirm password" />
-      <div *ngIf="getPasswordValid()" class="text-danger">
+      <div *ngIf="
+    (confirmPasswordCtrl?.touched || passwordCtrl?.touched)
+    && form.errors?.['mustMatch']
+  " class="text-danger">
         {{constString.passwordsMustMatch}}
       </div>
+
     </div>
 
 
@@ -57,6 +87,12 @@
       <div *ngIf="form.controls.flat_no.invalid && form.controls.flat_no.touched" class="text-danger">
         {{ constString.flatRequired }}
       </div>
+      <div *ngIf="
+      !form.controls.flat_no.errors?.['required']
+      && form.controls.flat_no.errors?.['pattern']
+    " class="text-danger">
+        Flat number must be exactly 4 digits (0-9)
+      </div>
     </div>
 
 
@@ -66,18 +102,21 @@
       <div *ngIf="form.controls.tower.invalid && form.controls.tower.touched" class="text-danger">
         {{ constString.towerRequired }}
       </div>
+      <div *ngIf="
+      !form.controls.tower.errors?.['required']
+      && form.controls.tower.errors?.['pattern']
+    " class="text-danger">
+        Tower must contain only letters (A-Z)
+      </div>
     </div>
 
 
-    <button type="submit" class="btn btn-primary w-100">{{constString.signup}}</button>
+    <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">
+      {{ constString.signup }}
+    </button>
 
 
-    <!-- <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div> -->
 
-    <!-- <div *ngIf="isSignedup && showSuccessMessage" class="text-success mt-3 text-center">
-      Signup successful!
-    </div> -->
+
   </form>
 </div>

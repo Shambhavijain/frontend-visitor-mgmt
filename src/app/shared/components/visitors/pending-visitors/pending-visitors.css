@@ -13,7 +13,7 @@
   align-items: center;
   padding: 10px;
   border: 1px solid #ccc;
-   font-family:Georgia, 'Times New Roman', Times, serif;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   border-radius: 6px;
   font-size: 15px;
   background-color: #f9f9f9;
@@ -34,7 +34,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 200px); /* Adjust based on header/tabs height */
+  height: calc(100vh - 200px);
+  /* Adjust based on header/tabs height */
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
@@ -42,7 +43,8 @@
 
 .background-icon {
   width: 100%;
-  max-width: 250px; /* Optional: limit max size */
+  max-width: 250px;
+  /* Optional: limit max size */
   height: auto;
   opacity: 0.5;
   object-fit: contain;
@@ -55,9 +57,57 @@
   font-weight: 500;
   text-align: center;
 }
+
 .avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.pagination-container button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background-color: #ffffff;
+  color: #333;
+  cursor: pointer;
+  border-radius: 4px;
+  min-width: 36px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.pagination-container button:hover:not(:disabled) {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.pagination-container button.active {
+  background-color: #007bff;
+  color: #ffffff;
+  border-color: #007bff;
+  font-weight: 600;
+}
+
+.pagination-container button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+
+.text-danger {
+  font-size: 0.85rem;
+  margin-top: 4px;
 }

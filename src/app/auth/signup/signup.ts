@@ -1,28 +1,33 @@
 import { Component, inject } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { DestroyRef } from '@angular/core';
-import { requestUser } from '../../shared/models/model';
-import { SignupService } from '../../shared/services/signup.service';
 import { NgIf, CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { constString } from '../../shared/constants/constStr';
+
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-function mustMatchPassword(control1: string, control2: string): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const val = control.get(control1);
-    const val2 = control.get(control2)
-    if (!val || !val2) {
+
+import { SignupService } from '../../shared/services/signup.service';
+import { constString } from '../../shared/constants/constStr';
+import { SignUpRequest } from '../../shared/models/auth.model';
+import { ApiResponse } from '../../shared/models/api.response.model';
+
+
+function mustMatchPassword(password: string, confirmPassword: string): ValidatorFn {
+  return (group: AbstractControl): ValidationErrors | null => {
+    const pass = group.get(password)?.value;
+    const confirm = group.get(confirmPassword)?.value;
+
+    if (!pass || !confirm) {
       return null;
     }
-    if (val.value !== val2.value) {
-      val2.setErrors({ mustMatch: true })
-    } else {
-      val2.setErrors(null);
-    }
-    return null;
+
+    return pass === confirm ? null : { mustMatch: true };
   };
 }
+
+
+
 @Component({
   selector: 'app-signup',
   imports: [ReactiveFormsModule, NgIf, CommonModule, ToastModule],
@@ -42,11 +47,17 @@ export class Signup {
       validators: [Validators.required]
     }),
     password: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(6)]
+      validators: [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.pattern(/^(?=.*[a-z])(?=.*\d).+$/)
+      ]
     }),
+
     confirmpassword: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(6)]
+      validators: [Validators.required]
     }),
+
     email: new FormControl('', {
       validators: [Validators.required, Validators.email]
     }),
@@ -54,40 +65,52 @@ export class Signup {
       validators: [Validators.required]
     }),
     flat_no: new FormControl('', {
-      validators: [Validators.required]
+      validators: [
+        Validators.required,
+        Validators.pattern(/^\d{4}$/)
+      ]
     }),
+
     tower: new FormControl('', {
-      validators: [Validators.required]
-    })
+      validators: [
+        Validators.required,
+        Validators.pattern(/^[A-Z]+$/)
+      ]
+    }),
+
   }, { validators: mustMatchPassword('password', 'confirmpassword') });
 
-  getEmailValid(): boolean {
-    return this.form.controls.email.invalid &&
-      this.form.controls.email.touched &&
-      this.form.controls.email.dirty
-  }
-  getPasswordValid(): boolean {
-    return this.form.controls.password.invalid &&
-      this.form.controls.password.touched &&
-      this.form.controls.password.dirty
+  isInvalid(control: AbstractControl | null): boolean {
+    return !!(control && control.invalid && (control.dirty || control.touched));
   }
 
+  get emailCtrl() {
+    return this.form.get('email');
+  }
+
+  get passwordCtrl() {
+    return this.form.get('password');
+  }
+
+  get confirmPasswordCtrl() {
+    return this.form.get('confirmpassword');
+  }
 
   onSubmit(): void {
-    const requestUser: requestUser = {
-      name: this.form.get('name')?.value ?? '',
-      email: this.form.get('email')?.value ?? '',
-      password: this.form.get('password')?.value ?? '',
-      address: this.form.get('address')?.value ?? '',
-      flat_no: this.form.get('flat_no')?.value ?? '',
-      tower: this.form.get('tower')?.value ?? ''
+    const requestUser: SignUpRequest = {
+      Name: this.form.get('name')?.value ?? '',
+      Email: this.form.get('email')?.value ?? '',
+      Password: this.form.get('password')?.value ?? '',
+      Address: this.form.get('address')?.value ?? '',
+      FlatNo: this.form.get('flat_no')?.value ?? '',
+      Tower: this.form.get('tower')?.value ?? ''
     };
 
     console.log("Form submitted")
     if (this.form.valid) {
       const subscription = this.signupService.signup(requestUser)
         .subscribe({
-          next: (res) => {
+          next: (res: ApiResponse<null>) => {
 
             this.isSignedup = true;
             this.messageService.add({
@@ -97,6 +120,7 @@ export class Signup {
               life: 1500
 
             });
+            this.form.reset();
 
             setTimeout(() => {
               this.router.navigate(['/login']);
@@ -107,13 +131,23 @@ export class Signup {
             console.error('Signup failed:', err);
 
             if (err.status === 409) {
-              this.errorMessage = 'Username already exists. Please choose a different one.';
+              const emailCtrl = this.form.get('email');
+
+              emailCtrl?.setErrors({
+                ...emailCtrl.errors,
+                emailExists: true
+              });
+              emailCtrl?.markAsTouched();
+
+              this.errorMessage = 'Email already exists. Please choose a different one.';
 
               this.messageService.add({
                 severity: 'error',
                 summary: 'Signup Error',
                 detail: this.errorMessage,
               });
+              this.form.reset();
+
 
             } else {
               this.errorMessage = 'Signup failed. Please try again.';
@@ -131,4 +165,5 @@ export class Signup {
       })
     }
   }
+
 }

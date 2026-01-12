@@ -5,16 +5,21 @@
 
     <ul class="nav nav-pills mb-3">
       <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'approved'"
-          (click)="activeTab = 'approved'">{{constString.approved}}</button>
+        <!-- <button class="nav-link" [class.active]="activeTab === 'approved'"
+          (click)="activeTab = 'approved'">{{constString.approved}}</button> -->
+        <button class="nav-link" [class.active]="activeTab === 'approved'" (click)="switchTab('approved')">
+          {{constString.approved}}
+        </button>
       </li>
       <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'declined'"
-          (click)="activeTab = 'declined'">{{constString.declined}}</button>
+        <button class="nav-link" [class.active]="activeTab === 'declined'" (click)="switchTab('declined')">
+          {{constString.declined}}
+        </button>
       </li>
       <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'pending'"
-          (click)="activeTab = 'pending'">{{constString.pending}}</button>
+        <button class="nav-link" [class.active]="activeTab === 'pending'" (click)="switchTab('pending')">
+          {{constString.pending}}
+        </button>
       </li>
       <li class="nav-item">
         <button class="nav-link" id="pills-AddVisitor-tab" data-bs-target="#pills-AddVisitor" type="button" role="tab"
@@ -39,39 +44,83 @@
 
         <form (ngSubmit)="submitVisitorForm(userForm)" #userForm="ngForm">
           <div class="modal-body">
+
+            <!-- NAME -->
             <div class="mb-3">
-              <label for="name" class="form-label">{{constString.name}}</label>
-              <input type="text" [(ngModel)]="newVisitor.name" name="name" class="form-control" required
-                #name="ngModel" />
-              <div *ngIf="name.invalid && name.touched" class="text-danger">{{constString.nameRequired}}</div>
+              <label class="form-label">{{ constString.name }}</label>
+              <input type="text" class="form-control" name="name" [(ngModel)]="newVisitor.name" #name="ngModel" required
+                pattern="^[A-Za-z ]+$" />
+
+              <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger">
+                <div *ngIf="name.errors?.['required']">
+                  {{ constString.nameRequired }}
+                </div>
+                <div *ngIf="!name.errors?.['required'] && name.errors?.['pattern']">
+                  Name must contain only letters
+                </div>
+              </div>
             </div>
+
+            <!-- EMAIL -->
             <div class="mb-3">
-              <label for="email" class="form-label">{{constString.email}}</label>
-              <input type="email" [(ngModel)]="newVisitor.email" name="email" class="form-control" required
-                #email="ngModel" />
-              <div *ngIf="email.invalid && email.touched" class="text-danger">{{constString.validEmailRequired}}</div>
+              <label class="form-label">{{ constString.email }}</label>
+              <input type="email" class="form-control" name="email" [(ngModel)]="newVisitor.email" #email="ngModel"
+                required email />
+
+              <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+                <div *ngIf="email.errors?.['required']">
+                  Email is required
+                </div>
+                <div *ngIf="!email.errors?.['required'] && email.errors?.['email']">
+                  Email address must consist of @
+                </div>
+              </div>
             </div>
+
+            <!-- TOWER -->
             <div class="mb-3">
-              <label for="tower" class="form-label">{{constString.tower}}</label>
-              <input type="text" [(ngModel)]="newVisitor.tower" name="tower" class="form-control" required
-                #tower="ngModel" />
-              <div *ngIf="tower.touched && tower.invalid" class="text-danger">{{constString.towerRequired}}</div>
+              <label class="form-label">{{ constString.tower }}</label>
+              <input type="text" class="form-control" name="tower" [(ngModel)]="newVisitor.tower" #tower="ngModel"
+                required pattern="^[A-Za-z]+$" />
+
+              <div *ngIf="tower.invalid && (tower.dirty || tower.touched)" class="text-danger">
+                <div *ngIf="tower.errors?.['required']">
+                  Tower is required
+                </div>
+                <div *ngIf="!tower.errors?.['required'] && tower.errors?.['pattern']">
+                  Tower must contain only letters
+                </div>
+              </div>
             </div>
+
+            <!-- FLAT NO -->
             <div class="mb-3">
-              <label for="flatno" class="form-label">{{constString.flatno}}</label>
-              <input type="text" [(ngModel)]="newVisitor.flat_no" name="flatno" class="form-control" required
-                #flatno="ngModel" />
-              <div *ngIf="flatno.touched && flatno.invalid" class="text-danger">{{constString.flatRequired}}</div>
+              <label class="form-label">{{ constString.flatno }}</label>
+              <input type="text" class="form-control" name="flatno" [(ngModel)]="newVisitor.flat_no" #flatno="ngModel"
+                required pattern="^[0-9]{4}$" />
+
+              <div *ngIf="flatno.invalid && (flatno.dirty || flatno.touched)" class="text-danger">
+                <div *ngIf="flatno.errors?.['required']">
+                  Flat number is required
+                </div>
+                <div *ngIf="!flatno.errors?.['required'] && flatno.errors?.['pattern']">
+                  Flat number must be exactly 4 digits
+                </div>
+              </div>
             </div>
+
           </div>
 
-          <div class="modal-footer d-flex justify-content-start">
-            <button type="submit" class="btn btn-primary"
-              [disabled]="userForm.invalid">{{constString.addVisitor}}</button>
-            <button type="button" class="btn btn-secondary ms-auto"
-              data-bs-dismiss="modal">{{constString.cancel}}</button>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">
+              {{ constString.addVisitor }}
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onCancel(userForm)">
+              {{ constString.cancel }}
+            </button>
           </div>
         </form>
+
       </div>
     </div>
 
