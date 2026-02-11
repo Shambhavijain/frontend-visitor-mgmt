@@ -14,7 +14,7 @@ export interface Visitor {
     tower: string;
     flat_no: string;
     status: VisitorStatus;
-    created_at?: string;   // ⬅ FIXED (was string)
+    created_at?: string;   
 }
 
 export interface UpdateVisitorRequest {
