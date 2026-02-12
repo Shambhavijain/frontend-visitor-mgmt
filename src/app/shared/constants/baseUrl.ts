@@ -1,3 +1,4 @@
-// export const BASE_URL= 'https://2yap3ub9ib.execute-api.us-east-1.amazonaws.com/Dev';
-export const BASE_URL = 'http://127.0.0.1:8000';
+export const BASE_URL = 'http://vmp-st-LoadB-9q8HunsQndQp-1836186428.us-east-1.elb.amazonaws.com';
+
+
 

@@ -124,11 +124,10 @@ export class Visitors implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: err.message || 'Failed to add visitor. Please try again.',
+          detail: err.error.message || 'Failed to add visitor. Please try again.',
           life: 3000,
         });
       },
