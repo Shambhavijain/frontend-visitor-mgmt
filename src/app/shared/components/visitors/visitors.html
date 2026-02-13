@@ -39,13 +39,12 @@
       <div class="modal-content custom-modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">{{constString.addVisitortitle}}</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
         <form (ngSubmit)="submitVisitorForm(userForm)" #userForm="ngForm">
           <div class="modal-body">
 
-            <!-- NAME -->
+           
             <div class="mb-3">
               <label class="form-label">{{ constString.name }}</label>
               <input type="text" class="form-control" name="name" [(ngModel)]="newVisitor.name" #name="ngModel" required
@@ -61,7 +60,7 @@
               </div>
             </div>
 
-            <!-- EMAIL -->
+            
             <div class="mb-3">
               <label class="form-label">{{ constString.email }}</label>
               <input type="email" class="form-control" name="email" [(ngModel)]="newVisitor.email" #email="ngModel"
@@ -77,7 +76,7 @@
               </div>
             </div>
 
-            <!-- TOWER -->
+           
             <div class="mb-3">
               <label class="form-label">{{ constString.tower }}</label>
               <input type="text" class="form-control" name="tower" [(ngModel)]="newVisitor.tower" #tower="ngModel"
@@ -93,7 +92,7 @@
               </div>
             </div>
 
-            <!-- FLAT NO -->
+            
             <div class="mb-3">
               <label class="form-label">{{ constString.flatno }}</label>
               <input type="text" class="form-control" name="flatno" [(ngModel)]="newVisitor.flat_no" #flatno="ngModel"

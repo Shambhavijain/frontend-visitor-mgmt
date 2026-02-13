@@ -44,12 +44,13 @@ export class Signup {
   private router = inject(Router)
   form = new FormGroup({
     name: new FormControl('', {
-      validators: [Validators.required]
+      validators: [Validators.required, Validators.maxLength(30)]
     }),
     password: new FormControl('', {
       validators: [
         Validators.required,
         Validators.minLength(6),
+        Validators.maxLength(12),
         Validators.pattern(/^(?=.*[a-z])(?=.*\d).+$/)
       ]
     }),
@@ -62,7 +63,7 @@ export class Signup {
       validators: [Validators.required, Validators.email]
     }),
     address: new FormControl('', {
-      validators: [Validators.required]
+      validators: [Validators.required, Validators.maxLength(50)]
     }),
     flat_no: new FormControl('', {
       validators: [
@@ -74,7 +75,7 @@ export class Signup {
     tower: new FormControl('', {
       validators: [
         Validators.required,
-        Validators.pattern(/^[A-Z]+$/)
+        Validators.pattern(/^[A-Z]{1}$/)
       ]
     }),
 

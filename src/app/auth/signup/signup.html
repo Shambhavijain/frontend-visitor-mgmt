@@ -6,9 +6,11 @@
     <h4 class="form-heading text-center mb-4">{{constString.appTitle}}</h4>
     <div class="mb-3">
       <label for="name" class="form-label">{{constString.name}}</label>
-      <input id="name" type="text" class="form-control" formControlName="name" placeholder="Enter your name" />
+      <input id="name" type="text" class="form-control" formControlName="name" placeholder="Enter your name"
+        [attr.maxLength]="30" [disabled]="(form.controls.name?.value?.length || 0) >= 30" />
       <div *ngIf="form.controls.name.invalid && form.controls.name.touched" class="text-danger">
-        {{constString.nameRequired}}
+        <div *ngIf="form.controls.name.errors?.['required']">{{constString.nameRequired}}</div>
+        <div *ngIf="form.controls.name.errors?.['maxlength']">Name cannot exceed 20 characters</div>
       </div>
     </div>
 
@@ -33,18 +35,12 @@
 
     <div class="mb-3">
       <label for="password" class="form-label">{{constString.password}}</label>
-      <input id="password" type="password" class="form-control" formControlName="password"
-        placeholder="Enter password" />
+      <input id="password" type="password" class="form-control" formControlName="password" placeholder="Enter password"
+        [attr.maxLength]="12" [disabled]="(passwordCtrl?.value?.length || 0) >= 12" />
       <div *ngIf="isInvalid(passwordCtrl)" class="text-danger">
-
-        <div *ngIf="passwordCtrl?.errors?.['required']">
-          {{constString.passwordRequired}}
-        </div>
-
-        <div *ngIf="passwordCtrl?.errors?.['minlength']">
-          {{constString.passwordRequirement}}
-        </div>
-
+        <div *ngIf="passwordCtrl?.errors?.['required']">{{constString.passwordRequired}}</div>
+        <div *ngIf="passwordCtrl?.errors?.['minlength']">{{constString.passwordRequirement}}</div>
+        <div *ngIf="passwordCtrl?.errors?.['maxlength']">Password cannot exceed 12 characters</div>
         <div *ngIf="passwordCtrl?.errors?.['pattern']">
           {{constString.passwordContain}}
           <ul class="mb-0">
@@ -73,9 +69,11 @@
 
     <div class="mb-3">
       <label for="address" class="form-label">{{ constString.address }}</label>
-      <input id="address" type="text" class="form-control" formControlName="address" placeholder="Enter your address" />
+      <input id="address" type="text" class="form-control" formControlName="address" placeholder="Enter your address"
+        [attr.maxLength]="50" [disabled]="(form.controls.address?.value?.length || 0) >= 50" />
       <div *ngIf="form.controls.address.invalid && form.controls.address.touched" class="text-danger">
-        {{ constString.addressRequired }}
+        <div *ngIf="form.controls.address.errors?.['required']">{{ constString.addressRequired }}</div>
+        <div *ngIf="form.controls.address.errors?.['maxlength']">Address cannot exceed 50 characters</div>
       </div>
     </div>
 
@@ -98,15 +96,11 @@
 
     <div class="mb-3">
       <label for="tower" class="form-label">{{ constString.tower }}</label>
-      <input id="tower" type="text" class="form-control" formControlName="tower" placeholder="Enter your tower" />
+      <input id="tower" type="text" class="form-control" formControlName="tower" placeholder="Enter your tower"
+        [attr.maxLength]="1" [disabled]="(form.controls.tower?.value?.length || 0) >= 1" />
       <div *ngIf="form.controls.tower.invalid && form.controls.tower.touched" class="text-danger">
-        {{ constString.towerRequired }}
-      </div>
-      <div *ngIf="
-      !form.controls.tower.errors?.['required']
-      && form.controls.tower.errors?.['pattern']
-    " class="text-danger">
-        Tower must contain only letters (A-Z)
+        <div *ngIf="form.controls.tower.errors?.['required']">{{ constString.towerRequired }}</div>
+        <div *ngIf="form.controls.tower.errors?.['pattern']">Tower must be a single capital letter (A-Z)</div>
       </div>
     </div>
 

@@ -148,12 +148,13 @@ export class Login {
           });
         },
         error: (err) => {
+         
           this.form.reset();
           this.isLoading = false;
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: err.message || 'Failed to Login ',
+            detail: err.error.message || 'Failed to Login ',
 
           });
         }
